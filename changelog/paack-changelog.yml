@@ -1,0 +1,17 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/changelog/welcome-to-paack
+scheme: dated-changelog
+platform: ReadMe changelog
+current_version: v3
+entries:
+- title: Welcome to Paack
+  url: https://paack.readme.io/changelog/welcome-to-paack
+  summary: >-
+    Introductory changelog entry on the Paack developer hub. Paack has announced
+    that from January its API documentation (guides, references, examples) is
+    consolidating into the public Postman workspace
+    (postman.com/paacklogistics/paack-apis).
+note: >-
+  Paack maintains a dated changelog on its ReadMe hub. Only the currently
+  published entry is captured here; the live changelog is the source of truth.

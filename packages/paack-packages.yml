@@ -1,0 +1,28 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/docs/sdk-intro
+note: >-
+  Paack publishes a first-party client SDK documented on its ReadMe developer
+  hub, with a primary Python implementation and generated client libraries in
+  additional languages (PHP, Java, Go). The SDK wraps the Orders, POD, Labeler,
+  Pull (tracking) and Coverage APIs and handles authentication and validation.
+  Public package-registry coordinates are not advertised in the docs; libraries
+  are distributed to integrating retailers by Paack's Customer Solutions team,
+  so registry URLs are omitted rather than fabricated.
+packages:
+- language: python
+  name: Paack SDK (Python)
+  docs: https://paack.readme.io/docs/sdk-python-docs
+  official: true
+- language: php
+  name: Paack SDK (PHP)
+  docs: https://paack.readme.io/docs/sdk-php
+  official: true
+- language: java
+  name: Paack SDK (Java)
+  docs: https://paack.readme.io/docs/sdk-java
+  official: true
+- language: go
+  name: Paack SDK (Go)
+  docs: https://paack.readme.io/docs/sdk-go
+  official: true

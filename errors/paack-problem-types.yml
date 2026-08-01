@@ -1,0 +1,36 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/reference/orders
+docs: https://paack.readme.io/docs/orders-errors
+format: json
+envelope:
+  behavior: One error is returned at a time.
+problems:
+- status: 400
+  title: Bad Request
+  meaning: >-
+    Validation error - request body is not valid JSON, omits a required field,
+    or a value does not match the expected type/constraint.
+- status: 401
+  title: Unauthorized
+  meaning: >-
+    No valid credentials detected. The authentication (Bearer) token is missing
+    or expired, or the caller lacks API access rights. Also returned in place of
+    403.
+- status: 403
+  title: Forbidden
+  meaning: >-
+    Insufficient permissions. Documented as currently not supported - the API
+    returns 401 instead.
+- status: 500
+  title: Internal Server Error
+  meaning: Internal error on Paack's side.
+  codes:
+  - code: IE-0001
+    detail: internal error
+  - code: UE-0001
+    detail: internal error
+note: >-
+  Error catalog searched from Paack's ReadMe reference and orders error guide.
+  Paack does not use application/problem+json (RFC 9457); errors are returned as
+  plain JSON, one at a time.

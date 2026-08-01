@@ -1,0 +1,44 @@
+generated: '2026-07-20'
+method: derived
+source: https://paack.readme.io/reference/token
+note: >-
+  Entity graph derived from Paack's documented REST operations (ReadMe reference).
+  No downloadable OpenAPI was available, so relationships are inferred from the
+  documented resource paths and payload descriptions rather than schema $refs.
+entities:
+- name: Order
+  id_field: external_id
+  path: /public/v3/orders/{external_id}
+  operations: [create, get, update, cancel]
+  docs: https://paack.readme.io/reference/orders
+  relationships:
+  - has_many: labels
+    via: parcels
+  - has_many: tracking_events
+    via: external_id
+  - has_one: delivery_verification
+    via: external_id
+- name: Label
+  path: /labels
+  docs: https://paack.readme.io/reference/labels
+  format: base64 PDF
+  relationships:
+  - belongs_to: order
+    via: barcode
+- name: TrackingEvent
+  path: /api/v3/tracking/events
+  docs: https://paack.readme.io/reference/list-events-1
+  relationships:
+  - belongs_to: order
+    via: external_id
+- name: DeliveryVerification
+  path: /public/v3/orders/{external_id}/delivery_verifications
+  docs: https://paack.readme.io/reference/delivery-verifications
+  description: Proof of delivery for an order.
+  relationships:
+  - belongs_to: order
+    via: external_id
+- name: Coverage
+  path: /coverage
+  docs: https://paack.readme.io/reference/coverage
+  description: Postcode / postcode-zone delivery coverage lookup.

@@ -1,0 +1,24 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/reference/token
+summary: >-
+  Paack provides a dedicated Staging environment that mirrors Production so
+  integrators can test order creation, labels, coverage and tracking before
+  going live. Staging and Production are fully separated at both the auth server
+  (Auth0 tenant) and the API gateway host.
+environments:
+- mode: staging
+  api_base: https://api.staging.paack.app
+  token_url: https://paack-hq-staging.eu.auth0.com/oauth/token
+  audience: https://ggl-stg-gcp-gw
+- mode: production
+  api_base: https://api.paack.app
+  token_url: https://paack-hq-production.eu.auth0.com/oauth/token
+  audience: https://ggl-pro-gcp-gw
+credentials: >-
+  Staging client_id / client_secret are issued by Paack's Customer Solutions
+  team; no self-serve public test keys are published.
+note: >-
+  No published magic test parcel identifiers or fixture data were found in the
+  docs; the sandbox is a full staging environment rather than a set of static
+  test values.

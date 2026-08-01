@@ -1,0 +1,30 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/docs/start-auth
+docs: https://paack.readme.io/reference/token
+summary:
+  types: [oauth2]
+  oauth2_flows: [clientCredentials]
+  token_format: JWT
+  token_type: Bearer
+  token_ttl_seconds: 86400
+schemes:
+- name: OAuth2ClientCredentials
+  type: oauth2
+  flow: clientCredentials
+  identity_provider: Auth0
+  token_url_production: https://paack-hq-production.eu.auth0.com/oauth/token
+  token_url_staging: https://paack-hq-staging.eu.auth0.com/oauth/token
+  request_content_type: application/json
+  parameters:
+  - client_id        # issued by Paack Customer Solutions team
+  - client_secret    # issued by Paack Customer Solutions team
+  - grant_type       # fixed value: client_credentials
+  - audience         # https://ggl-pro-gcp-gw (prod) / https://ggl-stg-gcp-gw (staging)
+  response_fields: [access_token, expires_in, token_type]
+  usage: 'Send the access_token as `Authorization: Bearer <access_token>` on every API request.'
+  token_ttl_seconds: 86400
+notes: >-
+  Credentials (client_id / client_secret) are provisioned by Paack's Customer
+  Solutions team. The same OAuth2 client-credentials flow is used for staging and
+  production, differentiated by the token URL and the audience value.

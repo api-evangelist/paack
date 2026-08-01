@@ -1,0 +1,48 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/docs/start-intro
+authentication:
+  style: oauth2-client-credentials
+  header: 'Authorization: Bearer <access_token>'
+  ttl_seconds: 86400
+  see: authentication/paack-authentication.yml
+environments:
+  staging:
+    api_base: https://api.staging.paack.app
+    token_url: https://paack-hq-staging.eu.auth0.com/oauth/token
+  production:
+    api_base: https://api.paack.app
+    token_url: https://paack-hq-production.eu.auth0.com/oauth/token
+versioning:
+  scheme: uri-path
+  current: v3
+  example_paths: [/public/v3/orders, /api/v3/tracking/events]
+identifiers:
+  external_id:
+    description: >-
+      Retailer-supplied unique order identifier used as the path key for order
+      GET/PUT/DELETE. An external_id belonging to a cancelled order cannot be
+      reused to create another order, giving order creation a natural
+      de-duplication guard (this is not a general Idempotency-Key header).
+    docs: https://paack.readme.io/docs/orders-identifiers
+error_envelope:
+  format: json
+  behavior: One error is returned at a time.
+  see: errors/paack-problem-types.yml
+labels:
+  format: base64-encoded PDF, optionally returned inline on order create/get
+  docs: https://paack.readme.io/docs/labels-intro
+tracking:
+  delivery: [webhooks, pull-api]
+  see: asyncapi/paack-webhooks.yml
+batch_integration:
+  sftp:
+    docs: https://paack.readme.io/docs/sftp-intro
+    note: Alternative order-upload channel using SSH keys and structured files.
+special_characters:
+  docs: https://paack.readme.io/docs/orders-special-characters
+notes: >-
+  Cross-cutting semantics derived from Paack's ReadMe developer hub. No documented
+  cursor/offset pagination beyond the Tracking events list (10 events per response
+  by default); no documented Idempotency-Key header; no documented rate-limit
+  response headers.

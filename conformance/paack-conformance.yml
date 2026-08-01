@@ -1,0 +1,25 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/docs/start-auth
+standards:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    Auth0 OAuth2 client-credentials flow (grant_type=client_credentials) issues
+    JWT bearer tokens for all API access.
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: token endpoint requires client_id/client_secret/audience/grant_type
+- id: jwt
+  conforms: true
+  evidence: access_token is a JSON Web Token, token_type Bearer, expires_in 86400
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors returned as plain JSON, not application/problem+json
+- id: rfc8594-sunset
+  conforms: false
+  evidence: no Sunset/Deprecation header policy published
+note: >-
+  Conformance derived from Paack's documented authentication and error behavior.
+  No published SOC 2 / ISO 27001 / PCI / GDPR compliance certification page was
+  found, so no Compliance pointer is asserted.

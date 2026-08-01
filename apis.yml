@@ -1,8 +1,16 @@
 aid: paack
 name: Paack
-description: 'Paack is a company surfaced as a portfolio company of softbank-vision-fund and added to
-  the API Evangelist network as a stub for enrichment. Sector: logistics. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  Paack is a technology-driven last-mile parcel delivery company serving
+  e-commerce retailers across Spain, Portugal, the United Kingdom, France and
+  Italy. Founded in 2015 and headquartered in Barcelona, Paack provides
+  scheduled, precise home delivery, returns and reverse logistics, real-time
+  parcel tracking, and proof of delivery. Its developer platform exposes REST
+  APIs for order creation and management, label generation, delivery coverage
+  and postcode-zone lookup, and real-time tracking events, complemented by
+  webhooks for event notifications and an sFTP batch integration. APIs are
+  authenticated with Auth0 OAuth2 client-credentials JSON Web Tokens and
+  documented on a ReadMe developer hub with staging and production environments.
 url: https://raw.githubusercontent.com/api-evangelist/paack/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,15 +18,118 @@ x-backed-by:
 - softbank-vision-fund
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://files.readme.io/005f576-small-Logo_paack_negativo.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
 - Logistics
-apis: []
+- Last Mile Delivery
+- Parcel Delivery
+- E-commerce
+- Shipping
+- Fulfillment
+- Tracking
+- Reverse Logistics
+apis:
+- name: Paack API
+  description: >-
+    REST API for creating and managing parcel delivery orders, generating
+    shipping labels, checking delivery coverage, retrieving proof of delivery,
+    and consuming real-time tracking events. Authenticated with Auth0 OAuth2
+    client-credentials JWT bearer tokens.
+  humanURL: https://paack.readme.io/
+  baseURL: https://api.paack.app
+  tags:
+  - Orders
+  - Labels
+  - Tracking
+  - Coverage
+  - Webhooks
+  properties:
+  - type: Documentation
+    url: https://paack.readme.io/docs/start-intro
+  - type: APIReference
+    url: https://paack.readme.io/reference/token
+  - type: GettingStarted
+    url: https://paack.readme.io/docs/start-integration
+  - type: Authentication
+    url: https://paack.readme.io/docs/start-auth
+  - type: Postman
+    url: https://www.postman.com/paacklogistics/paack-apis/collection/p93tvmy/paack-api-systems
+common:
+- type: DomainSecurity
+  url: security/paack-domain-security.yml
+- type: Authentication
+  url: authentication/paack-authentication.yml
+- type: Webhooks
+  url: asyncapi/paack-webhooks.yml
+- type: Packages
+  url: packages/paack-packages.yml
+- type: SDKs
+  url: packages/paack-packages.yml
+- type: Conventions
+  url: conventions/paack-conventions.yml
+- type: ErrorCatalog
+  url: errors/paack-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/paack-lifecycle.yml
+- type: ChangeLog
+  url: changelog/paack-changelog.yml
+- type: Conformance
+  url: conformance/paack-conformance.yml
+- type: Sandbox
+  url: sandbox/paack-sandbox.yml
+- type: DataModel
+  url: data-model/paack-data-model.yml
+- type: MCPServer
+  url: mcp/paack-mcp.yml
+- type: WellKnown
+  url: well-known/paack-well-known.yml
+- type: LLMsTxt
+  url: llms/paack-llms.txt
+- type: Website
+  url: https://paack.co/
+- type: Portal
+  url: https://paack.readme.io/
+- type: Documentation
+  url: https://paack.readme.io/docs/start-intro
+- type: APIReference
+  url: https://paack.readme.io/reference/token
+- type: GettingStarted
+  url: https://paack.readme.io/docs/start-integration
+- type: Support
+  url: https://help.paack.co/en/support/home
+- type: Blog
+  url: https://paack.co/blog/
+- type: ChangeLog
+  url: https://paack.readme.io/changelog/welcome-to-paack
+- type: Postman
+  url: https://www.postman.com/paacklogistics/paack-apis/collection/p93tvmy/paack-api-systems
+- type: TermsOfService
+  url: https://paack.co/terms-and-conditions/
+- type: PrivacyPolicy
+  url: https://paack.co/privacy-policy/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 14
+  pass: local-v1

@@ -1,0 +1,24 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/docs/start-intro
+versioning:
+  scheme: uri-path
+  current: v3
+  docs: https://paack.readme.io/reference/token
+environments:
+  staging: https://api.staging.paack.app
+  production: https://api.paack.app
+deprecation:
+  policy_url: null
+  sunset_header: null
+  note: >-
+    No formal deprecation/Sunset (RFC 8594) policy is published. Field-level
+    deprecation is documented per-operation (e.g. certain order fields cannot be
+    updated via PUT), and cancelled-order external_ids cannot be reused.
+sla:
+  url: null
+status_page: null
+note: >-
+  No public status page or published uptime SLA was found for Paack's API. The
+  migration notice on the developer hub indicates documentation is consolidating
+  into the public Postman workspace from January.

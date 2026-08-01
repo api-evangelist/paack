@@ -1,0 +1,41 @@
+generated: '2026-07-20'
+method: derived
+status: candidate
+source: https://paack.readme.io/reference/token
+note: >-
+  No official Paack MCP server was found. This is a candidate tool list derived
+  from Paack's documented REST operations, one tool per operation, as a starting
+  point for an MCP wrapper. Auth is Auth0 OAuth2 client-credentials (see
+  authentication/paack-authentication.yml).
+server:
+  name: paack
+  transport: http
+  url: null
+tools:
+- name: create_order
+  description: Create a delivery order.
+  source_operation: POST /public/v3/orders
+- name: get_order
+  description: Retrieve an order by external_id.
+  source_operation: GET /public/v3/orders/{external_id}
+- name: update_order
+  description: Update mutable fields of an order.
+  source_operation: PUT /public/v3/orders/{external_id}
+- name: cancel_order
+  description: Cancel an order.
+  source_operation: DELETE /public/v3/orders/{external_id}
+- name: get_delivery_verification
+  description: Retrieve proof of delivery for an order.
+  source_operation: GET /public/v3/orders/{external_id}/delivery_verifications
+- name: get_latest_tracking_events
+  description: Retrieve the latest tracking event for specified orders.
+  source_operation: GET /api/v3/tracking/events/latest
+- name: list_tracking_events
+  description: List tracking events with querying and pagination.
+  source_operation: GET /api/v3/tracking/events
+- name: generate_labels
+  description: Generate PDF labels for an order.
+  source_operation: POST /labels
+- name: check_coverage
+  description: Verify whether a postcode / postcode zone is covered by Paack.
+  source_operation: GET /coverage

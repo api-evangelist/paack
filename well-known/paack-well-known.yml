@@ -1,0 +1,33 @@
+generated: '2026-07-20'
+method: searched
+source: live probes of /.well-known/ on Paack hosts
+hosts:
+- host: https://paack.co
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.paack.app
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+note: >-
+  Paack publishes no /.well-known/ discovery documents on its corporate or API
+  hosts. OAuth2 discovery lives on the delegated Auth0 tenants
+  (paack-hq-production.eu.auth0.com / paack-hq-staging.eu.auth0.com), which do
+  expose /.well-known/openid-configuration for the auth server itself.

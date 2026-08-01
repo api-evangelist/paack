@@ -1,0 +1,25 @@
+generated: '2026-07-20'
+method: searched
+source: https://paack.readme.io/docs/webhooks-intro
+type: Webhooks
+summary: >-
+  Paack pushes tracking-event notifications to a customer-supplied HTTPS endpoint
+  as parcel status changes across direct and reverse (returns) orders. Webhooks
+  are the recommended alternative to polling the Tracking Pull API. The webhook
+  endpoint is configured with Paack's Customer Solutions team.
+transport: https-post
+docs:
+- overview: https://paack.readme.io/docs/webhooks-intro
+  requirements: https://paack.readme.io/docs/webhooks-requirements
+  output: https://paack.readme.io/docs/webhooks-output
+related:
+  tracking_events_docs: https://paack.readme.io/docs/tracking-events
+  pull_api:
+  - path: /api/v3/tracking/events/latest
+    docs: https://paack.readme.io/reference/get-events-1
+  - path: /api/v3/tracking/events
+    docs: https://paack.readme.io/reference/list-events-1
+note: >-
+  Paack documents a webhook event surface but does not publish an AsyncAPI
+  document; captured here as a Webhooks catalog. Individual event/status codes
+  are enumerated in the Tracking events reference (statuses vs. events).
