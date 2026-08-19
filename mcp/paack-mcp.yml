@@ -2,11 +2,9 @@ generated: '2026-07-20'
 method: derived
 status: candidate
 source: https://paack.readme.io/reference/token
-note: >-
-  No official Paack MCP server was found. This is a candidate tool list derived
-  from Paack's documented REST operations, one tool per operation, as a starting
-  point for an MCP wrapper. Auth is Auth0 OAuth2 client-credentials (see
-  authentication/paack-authentication.yml).
+note: No official Paack MCP server was found. This is a candidate tool list derived from Paack's documented
+  REST operations, one tool per operation, as a starting point for an MCP wrapper. Auth is Auth0 OAuth2
+  client-credentials (see authentication/paack-authentication.yml).
 server:
   name: paack
   transport: http
@@ -39,3 +37,9 @@ tools:
 - name: check_coverage
   description: Verify whether a postcode / postcode zone is covered by Paack.
   source_operation: GET /coverage
+deployment:
+  mode: none
+  verified: derived
+  tools: 9
+  checked: '2026-08-12'
+  source: catalog MCP census
