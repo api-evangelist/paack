@@ -39,6 +39,16 @@ tags:
 - Logistics
 - Last Mile Delivery
 - Parcel Delivery
+- E-Commerce
+- Shipping
+- Fulfillment
+- Tracking
+- Reverse Logistics
+tags_raw:
+- Company
+- Logistics
+- Last Mile Delivery
+- Parcel Delivery
 - E-commerce
 - Shipping
 - Fulfillment
@@ -54,6 +64,12 @@ apis:
   humanURL: https://paack.readme.io/
   baseURL: https://api.paack.app
   tags:
+  - Order
+  - Labels
+  - Tracking
+  - Coverage
+  - Webhook
+  tags_raw:
   - Orders
   - Labels
   - Tracking
