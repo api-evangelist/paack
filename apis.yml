@@ -44,7 +44,7 @@ accessModel:
 image: https://files.readme.io/005f576-small-Logo_paack_negativo.png
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-20'
+modified: '2026-10-06'
 tags:
 - Company
 - Logistics
@@ -98,6 +98,8 @@ apis:
   - type: Postman
     url: https://www.postman.com/paacklogistics/paack-apis/collection/p93tvmy/paack-api-systems
 common:
+- url: https://paack.co/feed/
+  type: BlogRSS
 - type: DomainSecurity
   url: security/paack-domain-security.yml
 - type: Authentication
