@@ -1,0 +1,398 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/paack/main/json-schema/paack-create-label-request-json-schema.json",
+  "title": "Defines the request to generate labels.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/paack-labeler-api-openapi.yml#/components/schemas/CreateLabelRequestJson",
+  "properties": {
+    "customer": {
+      "$ref": "#/$defs/CreateLabelRequestJsonCustomer"
+    },
+    "delivery_address": {
+      "$ref": "#/$defs/AddressDelivery"
+    },
+    "delivery_type": {
+      "description": "Identifies a direct of reverse order. Example: reverse.",
+      "type": "string"
+    },
+    "expected_delivery_ts": {
+      "$ref": "#/$defs/WindowObject"
+    },
+    "external_id": {
+      "description": "Uniquely identifies the order within the retailer.",
+      "maxLength": 30,
+      "minLength": 1,
+      "type": "string",
+      "x-go-name": "ExternalId"
+    },
+    "order_details": {
+      "description": "Specifies custom information on the order.",
+      "items": {
+        "$ref": "#/$defs/CreateLabelRequestJsonOrderDetails"
+      },
+      "type": "array"
+    },
+    "parcel_number": {
+      "$ref": "#/$defs/CreateLabelRequestJsonParcelNumber"
+    },
+    "parcels": {
+      "description": "Defines the parcels included in the order. Each object included in this array corresponds to one parcel identified by its barcode.\n\n**Display limits**:\n* The dimensions are not displayed if all three values are 0.",
+      "items": {
+        "$ref": "#/$defs/CreateLabelRequestJsonParcelsElem"
+      },
+      "type": "array",
+      "x-go-name": "Parcels"
+    },
+    "pick_up_address": {
+      "$ref": "#/$defs/AddressPickup"
+    },
+    "retailer_name": {
+      "description": "Specifies the retailer name.\n\n**Display limits**:\n* `retailer_name` can take up to 60 characters.",
+      "maxLength": 60,
+      "minLength": 1,
+      "type": "string"
+    },
+    "service_type": {
+      "description": "Defines the code that identifies the delivery day type, timeslot type, and available slot length.",
+      "type": "string",
+      "enum": [
+        "ST2",
+        "ST4",
+        "STZ",
+        "SF2",
+        "SF4",
+        "SFZ",
+        "NT2",
+        "NT4",
+        "NTH",
+        "NTZ",
+        "NF2",
+        "NF4",
+        "NFA",
+        "XF4",
+        "NFZ",
+        "PT2",
+        "PT4",
+        "PTH",
+        "PTA",
+        "PTZ",
+        "PF2",
+        "PF4",
+        "PFA",
+        "PFZ",
+        "CT2",
+        "CT4",
+        "CTH",
+        "CTZ",
+        "XFZ",
+        "CF2",
+        "CF4",
+        "CFA",
+        "CFZ",
+        "WT2",
+        "WT4",
+        "WTH",
+        "WTZ",
+        "WF2",
+        "WF4",
+        "WFA",
+        "WFZ",
+        "XTZ",
+        "XF2",
+        "ST3",
+        "DDD",
+        "ND",
+        "SD",
+        "UNK",
+        "RFA",
+        "RT2",
+        "RT4"
+      ]
+    },
+    "template_id": {
+      "$ref": "#/$defs/CreateLabelRequestJsonTemplateId"
+    }
+  },
+  "required": [
+    "customer",
+    "delivery_address",
+    "expected_delivery_ts",
+    "external_id",
+    "parcels",
+    "service_type"
+  ],
+  "type": "object",
+  "x-go-package": "github.com/PaackEng/lms-backend/infra/http",
+  "$defs": {
+    "AddressDelivery": {
+      "description": "Specifies the address of the delivery.\n\n**Display limits**:\n* `city` can take up to 58 characters.\n* A max. of approx. 60 characters (2 graphic lines) can be displayed for `line1` and `line2` combined.\n* A max. of approx. 30 characters can be displayed for `line2`.",
+      "properties": {
+        "city": {
+          "description": "Specifies the city.",
+          "maxLength": 58,
+          "minLength": 1,
+          "type": "string",
+          "x-go-name": "City"
+        },
+        "country": {
+          "description": "Specifies, in ISO 3166 alpha 2 format, the country.",
+          "maxLength": 2,
+          "minLength": 2,
+          "type": "string",
+          "x-go-name": "Country"
+        },
+        "line1": {
+          "description": "Specifies the primary address.",
+          "maxLength": 60,
+          "minLength": 1,
+          "type": "string",
+          "x-go-name": "Line1"
+        },
+        "line2": {
+          "description": "Specifies additional address information.",
+          "maxLength": 30,
+          "type": "string",
+          "x-go-name": "Line2"
+        },
+        "post_code": {
+          "description": "Specifies the ZIP code.",
+          "maxLength": 10,
+          "minLength": 4,
+          "type": "string",
+          "x-go-name": "PostCode"
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "line1",
+        "post_code"
+      ],
+      "type": "object",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "AddressPickup": {
+      "description": "Specifies the pickup address.\n\n**Display limits**:\n* `city` can take up to 43 characters.\n* A max. of approx. 43 characters (2 graphic lines) can be displayed for `line1` and `line2` combined.\n* A max. of approx. 22 characters can be displayed for `line2`.",
+      "properties": {
+        "city": {
+          "description": "Specifies the city.",
+          "maxLength": 43,
+          "minLength": 1,
+          "type": "string",
+          "x-go-name": "City"
+        },
+        "country": {
+          "description": "Specifies, in ISO 3166 alpha 2 format, the country.",
+          "maxLength": 2,
+          "minLength": 2,
+          "type": "string",
+          "x-go-name": "Country"
+        },
+        "line1": {
+          "description": "Specifies the primary address.",
+          "maxLength": 43,
+          "minLength": 1,
+          "type": "string",
+          "x-go-name": "Line1"
+        },
+        "line2": {
+          "description": "Specifies additional address information.",
+          "maxLength": 22,
+          "type": "string",
+          "x-go-name": "Line2"
+        },
+        "post_code": {
+          "description": "Specifies the ZIP code.",
+          "maxLength": 10,
+          "minLength": 4,
+          "type": "string",
+          "x-go-name": "PostCode"
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "line1",
+        "post_code"
+      ],
+      "type": "object",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "CreateLabelRequestJsonCustomer": {
+      "description": "Contains the properties `first_name` and `last_name`.\n\n**PDF Display limits**:\n* `first_name` and `last_name` combined can take up to 45 characters (2 graphic lines).\n* A max. of approx. 23 characters can be displayed for `last_name`.\n\n**ZPL Display limits**:\n* `first_name` and `last_name` combined can take up to 29 characters (1 graphic line).\n* A max. of approx. 23 characters can be displayed for `last_name`.\n",
+      "properties": {
+        "first_name": {
+          "description": "Specifies your customer's first name.",
+          "maxLength": 45,
+          "minLength": 1,
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "last_name": {
+          "description": "Specifies your customer's last name.",
+          "maxLength": 23,
+          "type": "string",
+          "x-go-name": "LastName"
+        }
+      },
+      "required": [
+        "first_name",
+        "last_name"
+      ],
+      "type": "object",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "CreateLabelRequestJsonOrderDetails": {
+      "description": "Contains the properties `name`, `type`, and `value`. Specifies custom information on the order. In case of `\"name\": \"sale_number\"` and `\"type\": \"string\"`, the `value` appears on the label instead of the `external_id`.",
+      "properties": {
+        "name": {
+          "default": "sale_number",
+          "description": "Specifies the name of the custom field.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "description": "Specifies the type of the custom field.",
+          "enum": [
+            "string",
+            "currency",
+            "country",
+            "number",
+            "boolean",
+            "uuid",
+            "uri",
+            "date",
+            "time",
+            "object",
+            "array",
+            null
+          ],
+          "minLength": 1,
+          "type": "string"
+        },
+        "value": {
+          "default": "",
+          "description": "Specifies the value of the custom field.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "value"
+      ],
+      "type": "object",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "CreateLabelRequestJsonParcelNumber": {
+      "description": "For ZPL labels, (`template_id` = `1` or `template_id` = `2`), specifies either the first parcel or all parcels from the `parcels[]` array to return. For PDF labels, all parcels from the `parcels[]` array are returned in the response.",
+      "type": "integer",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "CreateLabelRequestJsonParcelsElem": {
+      "description": "Defines the parcels included in the order. Each object included in this array corresponds to one parcel identified by its `barcode`.\n\n**Display limits**:\n* The dimensions are not displayed if all three values are 0.",
+      "properties": {
+        "barcode": {
+          "description": "Identifies the parcel. For ZPL labels, the maximum number of permitted characters is 25. For PDF labels, the maximum number of permitted characters is 33.",
+          "maxLength": 33,
+          "minLength": 1,
+          "type": "string",
+          "x-go-name": "Barcode"
+        },
+        "height": {
+          "description": "Specifies the parcel's height in cm.",
+          "format": "double",
+          "minimum": 0,
+          "type": "number",
+          "x-go-name": "Height"
+        },
+        "length": {
+          "description": "Specifies the parcel's length in cm.",
+          "format": "double",
+          "minimum": 0,
+          "type": "number",
+          "x-go-name": "Length"
+        },
+        "weight": {
+          "description": "Specifies the parcel's weight in kg.",
+          "format": "double",
+          "maximum": 30,
+          "minimum": 0,
+          "type": "number",
+          "x-go-name": "Weight"
+        },
+        "sku": {
+          "description": "Specifies the retailer barcode.",
+          "format": "string",
+          "minimum": 0,
+          "maximum": 33,
+          "type": "string"
+        },
+        "width": {
+          "description": "Specifies the parcel's width in cm.",
+          "format": "double",
+          "minimum": 0,
+          "type": "number",
+          "x-go-name": "Width"
+        }
+      },
+      "required": [
+        "barcode"
+      ],
+      "type": "object",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "CreateLabelRequestJsonTemplateId": {
+      "description": "Defines the format of the label. `1` is for a single ZPL label, `2` is for printing multiple ZPL labels at once; `null` or  missing property returns a PDF.",
+      "enum": [
+        1
+      ],
+      "type": "integer",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "WindowDatetime": {
+      "description": "Contains the properties `date` and `time`.",
+      "properties": {
+        "date": {
+          "description": "Specifies the date in `YYYY-MM-DD` format.",
+          "maxLength": 10,
+          "minLength": 10,
+          "type": "string",
+          "x-go-name": "Date"
+        },
+        "time": {
+          "description": "Specifies the UTC time in `hh:mm:ss` format.",
+          "maxLength": 8,
+          "minLength": 8,
+          "type": "string",
+          "x-go-name": "Time"
+        }
+      },
+      "required": [
+        "date",
+        "time"
+      ],
+      "type": "object",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    },
+    "WindowObject": {
+      "description": "Contains the objects `start` and `end` indicating the order delivery's timeslot.",
+      "properties": {
+        "end": {
+          "$ref": "#/$defs/WindowDatetime"
+        },
+        "start": {
+          "$ref": "#/$defs/WindowDatetime"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "type": "object",
+      "x-go-package": "github.com/PaackEng/lms-backend/infra/http"
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/paack/main/json-schema/paack-check-coverage-response200-schema.json",
+  "title": "Covered",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/paack-coverage-api-openapi.yml#/components/schemas/CheckCoverageResponse200",
+  "type": "object",
+  "oneOf": [
+    {
+      "title": "Request had query parameters",
+      "properties": {
+        "message": {
+          "type": "string",
+          "enum": [
+            "coverage",
+            "no coverage"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Request didn't have query parameters",
+      "properties": {
+        "coverage_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Postcode"
+          }
+        },
+        "coverage_zones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Zone"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "CountryCode": {
+      "type": "string",
+      "description": "Country code in ISO 3166 alpha 2 format.",
+      "enum": [
+        "ES",
+        "PT",
+        "GB",
+        "FR",
+        "IT"
+      ]
+    },
+    "CountryZone": {
+      "type": "string",
+      "description": "Country code in ISO 3166 alpha 2 format. Currently, the postcode zones are defined for Portugal and Great Britain.",
+      "enum": [
+        "PT",
+        "GB"
+      ]
+    },
+    "CoverageCode": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Postcode of the location."
+    },
+    "CoverageZone": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Coverage zone. Learn more [here](./postcode-zones)."
+    },
+    "Postcode": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "$ref": "#/$defs/CountryCode"
+        },
+        "coverage_code": {
+          "$ref": "#/$defs/CoverageCode"
+        }
+      }
+    },
+    "Zone": {
+      "title": "Postcode zone",
+      "type": "object",
+      "properties": {
+        "country": {
+          "$ref": "#/$defs/CountryZone"
+        },
+        "coverage_zone": {
+          "$ref": "#/$defs/CoverageZone"
+        }
+      }
+    }
+  }
+}

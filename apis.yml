@@ -1,23 +1,27 @@
 aid: paack
+
 name: Paack
-description: >-
-  Paack is a technology-driven last-mile parcel delivery company serving
-  e-commerce retailers across Spain, Portugal, the United Kingdom, France and
-  Italy. Founded in 2015 and headquartered in Barcelona, Paack provides
-  scheduled, precise home delivery, returns and reverse logistics, real-time
-  parcel tracking, and proof of delivery. Its developer platform exposes REST
-  APIs for order creation and management, label generation, delivery coverage
-  and postcode-zone lookup, and real-time tracking events, complemented by
-  webhooks for event notifications and an sFTP batch integration. APIs are
-  authenticated with Auth0 OAuth2 client-credentials JSON Web Tokens and
-  documented on a ReadMe developer hub with staging and production environments.
+
+description: Paack is a technology-driven last-mile parcel delivery company serving e-commerce retailers across Spain, Portugal, the United Kingdom,
+  France and Italy. Founded in 2015 and headquartered in Barcelona, Paack provides scheduled, precise home delivery, returns and reverse logistics,
+  real-time parcel tracking, and proof of delivery. Its developer platform exposes REST APIs for order creation and management, label generation,
+  delivery coverage and postcode-zone lookup, and real-time tracking events, complemented by webhooks for event notifications and an sFTP batch
+  integration. APIs are authenticated with Auth0 OAuth2 client-credentials JSON Web Tokens and documented on a ReadMe developer hub with staging
+  and production environments.
+
 url: https://raw.githubusercontent.com/api-evangelist/paack/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: vc-portfolio
+
 x-backed-by:
 - softbank-vision-fund
+
 x-tier: stub
+
 x-tier-reason: portfolio-lead
+
 deliveryModel:
   model: saas
   open_source: false
@@ -29,6 +33,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: self-serve
@@ -41,10 +46,15 @@ accessModel:
   - authentication
   generated: '2026-07-22'
   method: derived
+
 image: https://files.readme.io/005f576-small-Logo_paack_negativo.png
+
 specificationVersion: '0.23'
+
 created: '2026-07-17'
+
 modified: '2026-10-06'
+
 tags:
 - Company
 - Logistics
@@ -55,6 +65,7 @@ tags:
 - Fulfillment
 - Tracking
 - Reverse Logistics
+
 tags_raw:
 - Company
 - Logistics
@@ -65,39 +76,28 @@ tags_raw:
 - Fulfillment
 - Tracking
 - Reverse Logistics
-apis:
-- name: Paack API
-  description: >-
-    REST API for creating and managing parcel delivery orders, generating
-    shipping labels, checking delivery coverage, retrieving proof of delivery,
-    and consuming real-time tracking events. Authenticated with Auth0 OAuth2
-    client-credentials JWT bearer tokens.
-  humanURL: https://paack.readme.io/
-  baseURL: https://api.paack.app
-  tags:
-  - Order
-  - Labels
-  - Tracking
-  - Coverage
-  - Webhook
-  tags_raw:
-  - Orders
-  - Labels
-  - Tracking
-  - Coverage
-  - Webhooks
-  properties:
-  - type: Documentation
-    url: https://paack.readme.io/docs/start-intro
-  - type: APIReference
-    url: https://paack.readme.io/reference/token
-  - type: GettingStarted
-    url: https://paack.readme.io/docs/start-integration
-  - type: Authentication
-    url: https://paack.readme.io/docs/start-auth
-  - type: Postman
-    url: https://www.postman.com/paacklogistics/paack-apis/collection/p93tvmy/paack-api-systems
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/paack-agentic-access.yml
+- type: Spectral
+  url: rules/paack-rules.yml
+- type: JSONLD
+  url: json-ld/paack-context.jsonld
+- type: Vocabulary
+  url: vocabulary/paack-vocabulary.yml
+- type: Hosts
+  url: hosts/paack-hosts.yml
+- type: IntegrationEdges
+  url: integrations/paack-integration-edges.yml
+- type: Vendors
+  url: vendors/paack-vendors.yml
 - url: https://paack.co/feed/
   type: BlogRSS
 - type: DomainSecurity
@@ -126,11 +126,11 @@ common:
   url: data-model/paack-data-model.yml
 - type: X-MCPServerCandidate
   url: mcp/paack-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published
+    API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting
+    the artifact-type surfaces with a server that does not exist.'
 - type: WellKnown
   url: well-known/paack-well-known.yml
-- type: LLMsTxt
-  url: llms/paack-llms.txt
 - type: Website
   url: https://paack.co/
 - type: Portal
@@ -153,13 +153,108 @@ common:
   url: https://paack.co/terms-and-conditions/
 - type: PrivacyPolicy
   url: https://paack.co/privacy-policy/
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
-- FN: APIs.json
-  email: info@apis.io
+
+apis:
+- name: Paack API
+  description: REST API for creating and managing parcel delivery orders, generating shipping labels, checking delivery coverage, retrieving proof
+    of delivery, and consuming real-time tracking events. Authenticated with Auth0 OAuth2 client-credentials JWT bearer tokens.
+  humanURL: https://paack.readme.io/
+  baseURL: https://api.paack.app
+  tags:
+  - Order
+  - Labels
+  - Tracking
+  - Coverage
+  - Webhook
+  tags_raw:
+  - Orders
+  - Labels
+  - Tracking
+  - Coverage
+  - Webhooks
+  properties:
+  - type: Documentation
+    url: https://paack.readme.io/docs/start-intro
+  - type: APIReference
+    url: https://paack.readme.io/reference/token
+  - type: GettingStarted
+    url: https://paack.readme.io/docs/start-integration
+  - type: Authentication
+    url: https://paack.readme.io/docs/start-auth
+  - type: Postman
+    url: https://www.postman.com/paacklogistics/paack-apis/collection/p93tvmy/paack-api-systems
+  aid: paack:paack-api
+- aid: paack:paack-api-authentication
+  name: Paack Api Authentication Openapi.Yml API
+  description: The Api Authentication Openapi.Yml API from Paack — 1 operation(s) for api authentication openapi.yml.
+  humanURL: https://paack.readme.io/
+  baseURL: https://api.paack.app
+  tags:
+  - Api Authentication Openapi.Yml
+  properties:
+  - type: OpenAPI
+    url: openapi/paack-api-authentication-openapi.yml
+- aid: paack:paack-coverage-api
+  name: Paack Coverage API
+  description: The Coverage API from Paack — 1 operation(s) for coverage.
+  humanURL: https://paack.readme.io/
+  baseURL: https://api.paack.app
+  tags:
+  - Coverage
+  properties:
+  - type: OpenAPI
+    url: openapi/paack-coverage-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/paack-check-coverage-response200-schema.json
+- aid: paack:paack-labeler-api
+  name: Paack Labeler API
+  description: The Labeler API from Paack — 1 operation(s) for labeler.
+  humanURL: https://paack.readme.io/
+  baseURL: https://api.paack.app
+  tags:
+  - Labeler
+  properties:
+  - type: OpenAPI
+    url: openapi/paack-labeler-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/paack-create-label-request-json-schema.json
+- aid: paack:paack-orders-api
+  name: Paack Orders API
+  description: The Orders API from Paack — 3 operation(s) for orders.
+  humanURL: https://paack.readme.io/
+  baseURL: https://api.paack.app
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/paack-orders-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/paack-add-order-request-schema.json
+  - type: JSONSchema
+    url: json-schema/paack-update-order-request-schema.json
+- aid: paack:paack-tracking-pull-api
+  name: Paack Tracking Pull API
+  description: The Tracking Pull API from Paack — 2 operation(s) for tracking pull.
+  humanURL: https://paack.readme.io/
+  baseURL: https://api.paack.app
+  tags:
+  - Tracking Pull
+  properties:
+  - type: OpenAPI
+    url: openapi/paack-tracking-pull-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/paack-status-list-response-schema.json
+  - type: JSONSchema
+    url: json-schema/paack-status-get-response-schema.json
+
 x-enrichment:
   date: '2026-07-20'
   status: enriched
   artifacts_added: 14
   pass: local-v1
+
+x-readme-harvest:
+  date: '2026-10-14'
+  ops: 10
+  tool: harvest-readme-openapi.py
+  portal: https://paack.readme.io

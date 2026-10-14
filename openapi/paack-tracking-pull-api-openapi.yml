@@ -1,0 +1,837 @@
+info:
+  title: Tracking Pull API
+  description: Documentation on using the Tracking Pull API
+  contact:
+    name: Find an up-to-date version of this API's docs in Confluence.
+    url: https://paacklogistics.atlassian.net/wiki/spaces/PD/pages/3353903120/Pull+API
+    email: tech.writers@paack.co
+  version: 1.0.0
+openapi: 3.1.0
+security:
+- api_key: []
+servers:
+- url: https://tracking.paack.io
+  description: Production environment
+- url: https://tracking-sta.paack.io
+  description: Staging environment
+paths:
+  /api/v3/tracking/events:
+    get:
+      description: Retrieves the list of events. Querying is available with external IDs, sale numbers, time, and pagination. No query parameters returns all orders, 10 per response.
+      operationId: list-events
+      parameters:
+      - name: externalIds
+        in: query
+        description: Comma-separated IDs of the orders for which to retrieve the events for.
+        schema:
+          $ref: '#/components/schemas/ExternalId'
+      - name: saleNumbers
+        in: query
+        description: Comma-separated IDs of the orders for which to retrieve the events for.
+        schema:
+          $ref: '#/components/schemas/SaleNumber'
+      - name: barcodes
+        in: query
+        description: Comma-separated barcodes of the orders for which to retrieve the events for. Note that you **cannot** receive an individual parcel querying by barcode because tracking is always done at order level. This query returns the order(s) that include this barcode.
+        schema:
+          $ref: '#/components/schemas/Barcode'
+      - name: deliveryDetails
+        in: query
+        description: 'Sends detailed events for a delivery or a delivery attempt. For example if you use deliveryDetails you will get `SP004` - `DELIVERED THIRD PARTY` for orders delivered to a third party, otherwise you will always get  `SP003` - `DELIVERED` for all orders. The same will happen for delivery attempts, if you use deliveryDetails you will get further details about the delivery attempts, otherwise you''ll recieve `SA005` - `ATTEMPTED OTHER`. Existing events for delivery which you can get in case of using this parameter: `SP004` `Delivered to 3rd party` Events that will be available in the future for delivery: `SP022` `Delivered in safe place` `SP027` `Delivered to household member` Existing events for delivery attempts which you can get using this parameter: `SA012` - `ATTEMPTED DAMAGED` , `SA013` - `ATTEMPTED POD NOT PROVIDED` , `SA014` - `ATTEMPTED WEATHER OR DISTURBANCE` , `SA015` - `ATTEMPTED BUSINESS IS CLOSED`'
+        schema:
+          $ref: '#/components/schemas/DeliveryDetails'
+      - name: start
+        in: query
+        description: 'UTC start date in ISO format to retrieve orders for a specific time period. Dates must be written like: `2022-08-01T13:00:00+00:00`. Note that no other date format will be accepted.'
+        style: form
+        schema:
+          type: string
+      - name: end
+        in: query
+        description: 'UTC end date in ISO format to retrieve orders for a specific time period. Dates must be written like: `2022-08-01T13:00:00+00:00`. Note that no other date format will be accepted.'
+        style: form
+        schema:
+          type: string
+      - name: before
+        in: query
+        description: ' To construct your pagination request, use the value of the `before` query parameter from the `links.prev.href` object in the response.'
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: To construct your pagination request, use the value of the `after` query parameter from the `links.next.href` object in the response.
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: count
+        in: query
+        description: Number of events to return in a single response. Minimum is 10, maximum is 100.
+        style: form
+        explode: true
+        schema:
+          type: integer
+          minimum: 10
+          maximum: 100
+          default: 100
+      tags:
+      - Retrieve events history
+      responses:
+        '200':
+          description: Confirms the success of the request. If the correct parameters have been specified and the data exists, it has been retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/statusListResponse'
+              example:
+                data:
+                - attributes:
+                    id: 798efcbc-2b9d-42b4-b74d-8f512a642234
+                    tracking_id: 76472e43-2538-5937-a5a2-768420601245
+                    external_id: a68b761f-d299-479d-86fe-1d8a571b21c9
+                    tracking_url: https://t.paack.co/order_tracking?postal_code=08016&tracking_number=a68b761f-d299-479d-86fe-1d8a571b21c9
+                    event_id: SP001
+                    event_name: IN PROGRESS
+                    order_status: draft
+                    is_open: true
+                    parcels:
+                    - barcode: 3a368e5d-3f87-4945-8609-dfb8516b2dfd-1
+                      height: 4.3
+                      length: 3.6
+                      weight: 9.8
+                      width: 4.5
+                    - barcode: 3a368e5d-3f87-4945-8609-dfb8516b2dfd-3
+                      height: 4.3
+                      length: 3.6
+                      weight: 4.2
+                      width: 2.5
+                    - barcode: 3a368e5d-3f87-4945-8609-dfb8516b2dfd-2
+                      height: 4.3
+                      length: 3.6
+                      weight: 6.9
+                      width: 2.5
+                    delivery_type: direct
+                    updated_at: 2023-04-08 08:03:29.94546183 +0000 UTC
+                    service_type: ST2
+                    customer:
+                      first_name: Darrick Jacobi
+                      phone: '+34666666666'
+                      email: example@paack.co
+                    delivery_address:
+                      city: Barcelona
+                      country: ES
+                      line1: Via Augusta 16
+                      post_code: 08006
+                    expected_delivery_ts:
+                      start: '2023-04-08T16:11:00+00:00'
+                      end: '2023-04-08T18:22:00+00:00'
+                    expected_pickup_ts:
+                      start: '2023-04-08T16:00:00+00:00'
+                      end: '2023-04-08T16:01:00+00:00'
+                    pick_up_address:
+                      city: Barcelona
+                      country: ES
+                      line1: Avenida Diagonal 490
+                      post_code: 08006
+                    order_details:
+                    - name: sale_number
+                      type: string
+                      value: 2e0a3987-b097-4879-bb40-f06be2221dcd
+                    - name: paack_order_number
+                      type: string
+                      value: bf30ae81552ba68b761f-d299-479d-86fe-1d8a571b21c9
+                    - name: retailer_order_number
+                      type: string
+                      value: a68b761f-d299-479d-86fe-1d8a571b21c9
+                    delivery_instructions: Deliver to a neighbour
+                    vehicle_type: motorbike
+                    pick_up_instructions: The entrance is in Carrer Balmes
+                - attributes:
+                    id: 798efcbc-2b9d-42b4-b74d-8f512a642234
+                    tracking_id: 76472e43-2538-5937-a5a2-768420601245
+                    external_id: a68b761f-d299-479d-86fe-1d8a571b21c9
+                    tracking_url: https://t.paack.co/order_tracking?postal_code=08016&tracking_number=a68b761f-d299-479d-86fe-1d8a571b21c9
+                    event_id: SP001
+                    event_name: IN PROGRESS
+                    order_status: draft
+                    is_open: true
+                    parcels:
+                    - barcode: 3a368e5d-3f87-4945-8609-dfb8516b2dfd-1
+                      height: 4.3
+                      length: 3.6
+                      weight: 9.8
+                      width: 4.5
+                    - barcode: 3a368e5d-3f87-4945-8609-dfb8516b2dfd-3
+                      height: 4.3
+                      length: 3.6
+                      weight: 4.2
+                      width: 2.5
+                    - barcode: 3a368e5d-3f87-4945-8609-dfb8516b2dfd-2
+                      height: 4.3
+                      length: 3.6
+                      weight: 6.9
+                      width: 2.5
+                    delivery_type: direct
+                    updated_at: 2023-04-08 08:03:29.94546183 +0000 UTC
+                    service_type: ST2
+                    customer:
+                      first_name: Darrick Jacobi
+                      phone: '+34666666666'
+                      email: example@paack.co
+                    delivery_address:
+                      city: Barcelona
+                      country: ES
+                      line1: Via Augusta 16
+                      post_code: 08006
+                    expected_delivery_ts:
+                      start: '2023-04-08T16:11:00+00:00'
+                      end: '2023-04-08T18:22:00+00:00'
+                    expected_pickup_ts:
+                      start: '2023-04-08T16:00:00+00:00'
+                      end: '2023-04-08T16:01:00+00:00'
+                    pick_up_address:
+                      city: Barcelona
+                      country: ES
+                      line1: Avenida Diagonal 490
+                      post_code: 08006
+                    order_details:
+                    - name: sale_number
+                      type: string
+                      value: 2e0a3987-b097-4879-bb40-f06be2221dcd
+                    - name: paack_order_number
+                      type: string
+                      value: bf30ae81552ba68b761f-d299-479d-86fe-1d8a571b21c9
+                    - name: retailer_order_number
+                      type: string
+                      value: a68b761f-d299-479d-86fe-1d8a571b21c9
+                    delivery_instructions: Deliver to a neighbour
+                    pick_up_instructions: The entrance is in Carrer Balmes
+                error: []
+                links: null
+        '400':
+          $ref: '#/components/responses/listResponse400'
+        '401':
+          $ref: '#/components/responses/unauthorizedError'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/serverError'
+  /api/v3/tracking/events/latest:
+    get:
+      description: Retrieves the last event of the specified orders.
+      operationId: get-events
+      parameters:
+      - name: externalIds
+        in: query
+        description: Comma-separated external IDs for which to retrieve the last event.
+        required: false
+        schema:
+          $ref: '#/components/schemas/ExternalId'
+      - name: saleNumbers
+        in: query
+        description: Comma-separated IDs of the orders for which to retrieve the last event for.
+        schema:
+          $ref: '#/components/schemas/SaleNumber'
+      - name: barcodes
+        in: query
+        description: Comma-separated barcodes of the orders for which to retrieve the last event for. Note that you **cannot** receive an individual parcel querying by barcode because tracking is always done at order level. This query returns the order(s) that include this barcode.
+        schema:
+          $ref: '#/components/schemas/Barcode'
+      - name: deliveryDetails
+        in: query
+        description: 'Sends detailed events for a delivery or a delivery attempt. For example if you use deliveryDetails you will get `SP004` - `DELIVERED THIRD PARTY` for orders delivered to a third party, otherwise you will always get  `SP003` - `DELIVERED` for all orders. The same will happen for delivery attempts, if you use deliveryDetails you will get further details about the delivery attempts, otherwise you''ll recieve `SA005` - `ATTEMPTED OTHER`. Existing events for delivery which you can get in case of using this parameter: `SP004` `Delivered to 3rd party` Events that will be available in the future for delivery: `SP022` `Delivered in safe place` `SP027` `Delivered to household member` Existing events for delivery attempts which you can get using this parameter: `SA012` - `ATTEMPTED DAMAGED` , `SA013` - `ATTEMPTED POD NOT PROVIDED` , `SA014` - `ATTEMPTED WEATHER OR DISTURBANCE` , `SA015` - `ATTEMPTED BUSINESS IS CLOSED`'
+        schema:
+          $ref: '#/components/schemas/DeliveryDetails'
+      tags:
+      - Retrieve last event
+      responses:
+        '200':
+          description: Returns information, including the last event, of the orders specified in the query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/statusGetResponse'
+              example:
+                data:
+                - id: 8ba85474-c659-41a4-b5ad-fdd715995f49
+                  external_id: c91db975-32d2-4059-96e3-c5b214b86d94
+                  event_id: SP003
+                  event_name: DELIVERED
+                  event_description: The order is being processed in Paack’s network
+                  order_status: draft
+                  is_open: true
+                  parcels:
+                  - barcode: '32349234032944'
+                    height: 10
+                    length: 40
+                    weight: 3.4
+                    width: 60
+                  - barcode: 05349234032940
+                    height: 10
+                    length: 40
+                    weight: 3.4
+                    width: 60
+                  - barcode: '95349234031144'
+                    height: 10
+                    length: 40
+                    weight: 3.4
+                    width: 60
+                  delivery_attempt: 1
+                  delivery_type: direct
+                  updated_at: 2023-04-08 12:16:54.949096403 +0000 UTC
+                  service_type: ST2
+                  customer:
+                    first_name: Antonia Jacobi
+                    phone: '+34666666666'
+                    email: example@paack.co
+                  delivery_address:
+                    city: Barcelona
+                    country: ES
+                    line1: Via Augusta 16
+                    post_code: 08006
+                  expected_delivery_ts:
+                    start: '2023-04-08T16:11:00+00:00'
+                    end: '2023-04-08T18:22:00+00:00'
+                  expected_pickup_ts:
+                    start: '2023-04-08T16:01:00+00:00'
+                    end: '2023-04-08T16:02:00+00:00'
+                  pick_up_address:
+                    city: Barcelona
+                    country: ES
+                    line1: Avenida Diagonal 490
+                    post_code: 08006
+                  order_details:
+                  - name: sale_number
+                    type: string
+                    value: 575a7acd25
+                  - name: paack_order_number
+                    type: string
+                    value: 575a7acd25c5c91db975-32d2-4059-96e3-c5b214b86d94
+                  - name: retailer_order_number
+                    type: string
+                    value: c91db975-32d2-4059-96e3-c5b214b86d94
+                  delivery_instructions: Deliver to a neighbour
+                  vehicle_type: motorbike
+                  pick_up_instructions: The entrance is in Carrer Balmes
+                  tracking_url: https://t.staging.paack.co/order_tracking?postal_code=1000-01&tracking_number=c91db975-32d2-4059-96e3-c5b214b86d94
+                  tracking_id: 2e6da281-687b-543e-8cd0-56870fadfff4
+                error: null
+        '400':
+          $ref: '#/components/responses/getResponse400'
+        '401':
+          $ref: '#/components/responses/unauthorizedError'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/serverError'
+components:
+  responses:
+    getResponse400:
+      description: Returned in case of validation errors.<br /><br />To ensure a correct validation of a request:<br />- All mandatory query parameters must be defined.<br />- Values for query parameters in the request must match the specific data type and format, including all limitations (e.g., `externalId` must be unique).
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                description: HTTP response code.
+                type: number
+                enum:
+                - 400
+              message:
+                description: 'invalid request: Query parameters are mandatory.'
+                type: string
+                enum:
+                - invalid request
+            example:
+              code: 400
+              message: invalid request
+    unauthorizedError:
+      description: Unauthorized because of a missing or expired token.
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                description: HTTP response code.
+                type: number
+                enum:
+                - 401
+              message:
+                description: Error details.
+                type: string
+                enum:
+                - Jwt is missing
+                - Jwt is expired
+            example:
+              code: 401
+              message: Jwt is missing
+    resourceNotFound:
+      description: The order for the specified parameters could not be found.
+      content:
+        application/json:
+          schema:
+            properties:
+              message:
+                description: ''
+                type: string
+                enum:
+                - Resource not found.
+    serverError:
+      description: Returned in case of an internal server error.
+      content:
+        application/json:
+          schema:
+            properties:
+              message:
+                description: ''
+                type: string
+                enum:
+                - 500 Internal Server Error.
+    listResponse400:
+      description: Returned in case of validation errors.<br /><br />To ensure a correct validation of a request:<br />- All mandatory query parameters must be defined.<br />- Values for query parameters in the request must match the specific data type and format, including all limitations (e.g., `externalId` must be unique).
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                description: HTTP response code.
+                type: number
+                enum:
+                - 400
+              message:
+                description: Invalid request.
+                type: string
+                enum:
+                - invalid request
+            example:
+              code: 400
+              message: 'invalid request: start format error: parsing time "2022-09p13T07:25:00.52+00:00" as "2006-01-02T15:04:05Z07:00": cannot parse "p13T07:25:00.52+00:00" as "-".'
+  schemas:
+    Address:
+      description: Address definition
+      title: Address
+      type: object
+      properties:
+        city:
+          description: City.
+          type: string
+        country:
+          description: Country in ISO 3166 alpha 2 format.
+          type: string
+          example: '`ES` `FR` `GB` `PT` `IT`'
+        county:
+          description: County or region.
+          type: string
+        line_1:
+          description: Primary address.
+          type: string
+        line_2:
+          description: Additional address information.
+          type: string
+        post_code:
+          description: Zip code.
+          type: string
+    Customer:
+      title: Customer
+      type: object
+      properties:
+        customer_details:
+          description: customer data
+          type: array
+          items:
+            $ref: '#/components/schemas/Detail'
+        customer_type:
+          type: string
+        email:
+          description: Customer's email address. Required if `phone` not provided.
+          type: string
+        external_id:
+          $ref: '#/components/schemas/ExternalId'
+        first_name:
+          description: Customer's first name.
+          type: string
+        last_name:
+          description: Customer's last name.
+          type: string
+        phone:
+          description: Customer's phone number with the country prefix. Required if `email` not provided.
+          type: string
+    Detail:
+      title: Detail
+      type: object
+      description: 'Specifies additional properties of the order. A property called `sale_number` stores the order''s custom identifier. Note that the properties are persisted by Paack although you cannot retrieve them through the GET method.
+
+
+        The supported types are `string`, `number`, `boolean`, `object`, `array`, and `null`. For better user experience, only `string`, `number`, and `boolean` are displayed in this documentation.'
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          type: object
+    ExternalId:
+      description: Order's ID assigned by the retailer; unique within all the retailer's orders manifested to Paack. Can include special characters but excluding a comma. Note that if you use special characters in an external ID, you will have to convert them to retrieve the order through our tracking. For this reason, we recommend not using special characters.
+      example: 200000V3004
+      type: string
+    SaleNumber:
+      description: Sale ID assigned by the retailer; unique within all the retailer's orders manifested to Paack. Can include special characters but excluding a comma. Note that if you use special characters in a sale number, you will have to convert them to retrieve the order through our tracking. For this reason, we recommend not using special characters.
+      example: V3004
+      type: string
+    Barcode:
+      description: Barcode identifier of a parcel within an order.
+      example: '1223738849595004'
+      type: string
+    DeliveryDetails:
+      description: Option to show delivery events in details.
+      example: true
+      type: boolean
+    OrderStatus:
+      title: OrderStatus
+      type: object
+      properties:
+        cod_currency:
+          type: string
+          description: Currency code in ISO 4217 format.
+          enum:
+          - EUR
+          - GBP
+        cod_value:
+          description: Amount of cash on delivery.
+          type: number
+        customer:
+          description: Customer name.
+          $ref: '#/components/schemas/Customer'
+        delivery_address:
+          $ref: '#/components/schemas/Address'
+        delivery_attempt:
+          description: Number of delivery attempts made.
+          type: integer
+          format: int64
+        delivery_instructions:
+          description: Optional delivery instructions for Paack.
+          type: string
+        delivery_type:
+          description: Whether delivery is direct or reverse.
+          type: string
+        event_description:
+          description: Description of an event that happens on route. Events trigger information that affect an order's status in the Paack system.
+          type: string
+        event_id:
+          description: Unique ID identifying an event.
+          type: string
+        event_name:
+          description: Name of an event.
+          type: string
+        expected_delivery_ts:
+          $ref: '#/components/schemas/WindowObject'
+        expected_pick_up_ts:
+          $ref: '#/components/schemas/WindowObject'
+        external_order_id:
+          description: Unique external identifier of an order.
+          type: string
+        id:
+          description: Universal unique ID of the order returned by the Pull API. This is different from the order_id returned by the Order Management API.
+          type: string
+        insured_currency:
+          description: Amount of money insured.
+          type: string
+        insured_value:
+          format: double
+          type: number
+        is_open:
+          description: A boolean value which is stored for each order.
+          type: boolean
+        order_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Detail'
+        order_id:
+          description: The internal unique ID of an order in Paack.
+          type: string
+        order_status:
+          description: Status of an order which gives information about what stage an order is at.
+          type: string
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+        parent_id:
+          description: Unique order ID that is created and assigned to an order when a delivery attempt has failed.
+          type: string
+        pick_up_address:
+          $ref: '#/components/schemas/Address'
+        pick_up_instructions:
+          description: Specific instructions for Paack to follow when picking up an order.
+          type: string
+        proof_of_delivery:
+          description: Unique base 64 image that provides proof that a delivery was made.
+          type: string
+        retailer_id:
+          description: A GUID identifying the retailer; assigned by Paack.
+          type: string
+        service_type:
+          description: Code that identifies the delivery day type, timeslot type, and available slot length.
+          type: string
+          enum:
+          - ST2 (Same day delivery)
+          - NT2 (Next day delivery)
+        tracking_id:
+          description: The unique ID assigned to an order for tracking purposes.
+          type: string
+        tracking_url:
+          description: The endpoint that stores the tracking data of an order. It is used to access the end customer tracking page.
+          type: string
+        updated_at:
+          description: A timestamp field specifying when the order was updated.
+          type: string
+        vehicle_type:
+          description: The type of vehicle used to make the order.
+          type: string
+    Parcel:
+      title: Parcel
+      description: ' The Parcels included in the order.'
+      type: object
+      properties:
+        barcode:
+          description: ' Barcode identifier.'
+          type: string
+        height:
+          description: ' The height of the parcel.'
+          type: number
+        id:
+          description: ' Parcel UUID indentifier.'
+          type: string
+        length:
+          description: ' The length of the parcel.'
+          type: number
+        order_id:
+          description: The internal unique ID of an order in Paack.
+          type: string
+        status:
+          description: Information about what is happening to a parcel.
+          type: string
+        weight:
+          description: ' Parcel weight.'
+          type: number
+        width:
+          description: ' Parcel width.'
+          type: number
+    WindowDatetime:
+      title: WindowDatetime
+      type: object
+      properties:
+        date:
+          type: string
+        time:
+          type: string
+    WindowObject:
+      title: WindowObject
+      description: Timeslot defined by the objects start and end.
+      type: object
+      properties:
+        end:
+          $ref: '#/components/schemas/WindowDatetime'
+        start:
+          $ref: '#/components/schemas/WindowDatetime'
+    statusGetResponse:
+      title: statusGetResponse
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/OrderStatus'
+        error:
+          type: 'null'
+      example:
+        data:
+        - id: 0e5a1edf-456e-4a74-a9b5-ddef1ddb2d9a
+          external_id: 5CVB4l54_p7sd353a
+          event_id: SM001
+          event_name: MANIFESTED
+          event_description: The order data has been received in our systems
+          is_open: true
+          parcels:
+          - barcode: 034724878233029421
+            height: 28.2
+            length: 38
+            weight: 12.1
+            width: 48.2
+          delivery_attempt: 1
+          delivery_type: direct
+          updated_at: 2022-08-11 06:31:21.508207777 +0000 UTC
+          service_type: ST2
+          customer:
+            first_name: Martín Fierro
+            email: martin.fierro@example.es
+          delivery_address:
+            city: Barcelona
+            country: ES
+            line1: Via Augusta 17, Principal
+            post_code: 08006
+          expected_delivery_ts:
+            start: '2022-09-08T08:00:00+00:00'
+            end: '2022-09-08T10:01:00+00:00'
+          expected_pickup_ts:
+            start: '2022-08-08T16:00:00+00:00'
+            end: '2022-08-08T16:01:00+00:00'
+          pick_up_address:
+            city: Barcelona
+            country: ES
+            line1: Avinguda Diagonal 1234
+            post_code: 08021
+          order_details:
+          - name: sale_number
+            type: string
+            value: g_328294984981
+          - name: paack_order_number
+            type: string
+            value: c348446eee4e5CVB4l54_p7sd353a
+          - name: retailer_order_number
+            type: string
+            value: 5CVB4l54_p7sd353a
+          delivery_instructions: Leave at the door
+          pick_up_instructions: Check opening hours
+          tracking_url: https://t.paack.co/order_tracking?postal_code=08006&tracking_number=5CVB4l54_p7sd353a
+          tracking_id: 4d44aff8-c4d7-5459-8544-d357a1b7c5ab
+        error: null
+    ResponseError:
+      title: ResponseError
+      type: object
+      properties:
+        msg:
+          type: string
+    statusListResponse:
+      title: statusListResponse
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderStatus'
+          description: ''
+        error:
+          $ref: '#/components/schemas/ResponseError'
+      example:
+        data:
+        - attributes:
+            id: e0ef7ce2-c15d-46b5-88f7-2cb5356e96cd
+            external_id: 5ml54_p7sd353a
+            event_id: SP001
+            event_name: IN PROGRESS
+            is_open: true
+            parcels:
+            - barcode: 034724878233029421
+              height: 28.2
+              length: 38
+              weight: 12.1
+              width: 48.2
+            delivery_attempt: 1
+            delivery_type: direct
+            updated_at: 2022-08-11 06:43:38.795153872 +0000 UTC
+            service_type: ST2
+            customer:
+              first_name: Martín Fierro
+              email: martin.fierro@example.es
+            delivery_address:
+              city: Barcelona
+              country: ES
+              line1: Via Augusta 17, Principal
+              post_code: 08006
+            expected_delivery_ts:
+              start: '2022-07-08T16:11:00+00:00'
+              end: '2022-07-08T18:22:00+00:00'
+            expected_pickup_ts:
+              start: '2022-07-08T16:00:00+00:00'
+              end: '2022-07-08T16:01:00+00:00'
+            pick_up_address:
+              city: Barcelona
+              country: ES
+              line1: Avinguda Diagonal 1234
+              post_code: 08021
+            order_details:
+            - name: sale_number
+              type: string
+              value: g_328294984981
+            - name: paack_order_number
+              type: string
+              value: 7812e798a28a5ml54_p7sd353a
+            - name: retailer_order_number
+              type: string
+              value: 5ml54_p7sd353a
+            delivery_instructions: Leave at the door
+            pick_up_instructions: Check opening hours
+            tracking_url: https://t.paack.co/order_tracking?postal_code=08006&tracking_number=5ml54_p7sd353a
+            tracking_id: 419dfffc-b2dc-557f-85c9-025d254a3ae8
+        - attributes:
+            id: 0e5a1edf-456e-4a74-a9b5-ddef1ddb2d9a
+            external_id: 5CVB4l54_p7sd353a
+            event_id: SP003
+            event_name: DELIVERED
+            is_open: true
+            parcels:
+            - barcode: 034724878233029421
+              height: 28.2
+              length: 38
+              weight: 12.1
+              width: 48.2
+            delivery_attempt: 1
+            delivery_type: direct
+            updated_at: 2022-08-11 06:31:21.508207777 +0000 UTC
+            service_type: ST2
+            customer:
+              first_name: Ramon Llull
+              email: ramon1232@example.es
+            delivery_address:
+              city: Palma de Mallorca
+              country: ES
+              line1: Calle de Aragón, 1232
+              post_code: 07009
+            expected_delivery_ts:
+              start: '2022-09-28T08:00:00+00:00'
+              end: '2022-09-28T10:00:00+00:00'
+            expected_pickup_ts:
+              start: '2022-09-01T16:00:00+00:00'
+              end: 2022-09-011T16:01:00+00:00
+            pick_up_address:
+              city: Barcelona
+              country: ES
+              line1: Avinguda Diagonal 1234
+              post_code: 08021
+            order_details:
+            - name: sale_number
+              type: string
+              value: g_328294984981
+            - name: paack_order_number
+              type: string
+              value: c348446eee4e5CVB4l54_p7sd353a
+            - name: retailer_order_number
+              type: string
+              value: 5CVB4l54_p7sd353a
+            delivery_instructions: Leave at the door
+            pick_up_instructions: Check opening hours
+            tracking_url: https://t.paack.co/order_tracking?postal_code=08006&tracking_number=5CVB4l54_p7sd353a
+            tracking_id: 4d44aff8-c4d7-5459-8544-d357a1b7c5ab
+        error: []
+        links:
+          next: {}
+          prev: {}
+  securitySchemes:
+    api_key:
+      in: header
+      name: Authorization
+      type: apiKey
+x-provenance:
+  method: searched
+  source: https://paack.readme.io/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://paack.readme.io/reference/get-events-1.md
+  - https://paack.readme.io/reference/list-events-1.md
+  merge:
+    pages: 2
+    deduped: 15
+    conflicts_kept_first: 0

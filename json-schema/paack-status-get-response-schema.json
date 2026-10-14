@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/paack/main/json-schema/paack-status-get-response-schema.json",
+  "title": "statusGetResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/statusGetResponse",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "#/$defs/OrderStatus"
+    },
+    "error": {
+      "type": "null"
+    }
+  },
+  "$defs": {
+    "Address": {
+      "description": "Address definition",
+      "title": "Address",
+      "type": "object",
+      "properties": {
+        "city": {
+          "description": "City.",
+          "type": "string"
+        },
+        "country": {
+          "description": "Country in ISO 3166 alpha 2 format.",
+          "type": "string"
+        },
+        "county": {
+          "description": "County or region.",
+          "type": "string"
+        },
+        "line_1": {
+          "description": "Primary address.",
+          "type": "string"
+        },
+        "line_2": {
+          "description": "Additional address information.",
+          "type": "string"
+        },
+        "post_code": {
+          "description": "Zip code.",
+          "type": "string"
+        }
+      }
+    },
+    "Customer": {
+      "title": "Customer",
+      "type": "object",
+      "properties": {
+        "customer_details": {
+          "description": "customer data",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Detail"
+          }
+        },
+        "customer_type": {
+          "type": "string"
+        },
+        "email": {
+          "description": "Customer's email address. Required if `phone` not provided.",
+          "type": "string"
+        },
+        "external_id": {
+          "$ref": "#/$defs/ExternalId"
+        },
+        "first_name": {
+          "description": "Customer's first name.",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Customer's last name.",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Customer's phone number with the country prefix. Required if `email` not provided.",
+          "type": "string"
+        }
+      }
+    },
+    "Detail": {
+      "title": "Detail",
+      "type": "object",
+      "description": "Specifies additional properties of the order. A property called `sale_number` stores the order's custom identifier. Note that the properties are persisted by Paack although you cannot retrieve them through the GET method.\n\nThe supported types are `string`, `number`, `boolean`, `object`, `array`, and `null`. For better user experience, only `string`, `number`, and `boolean` are displayed in this documentation.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "object"
+        }
+      }
+    },
+    "ExternalId": {
+      "description": "Order's ID assigned by the retailer; unique within all the retailer's orders manifested to Paack. Can include special characters but excluding a comma. Note that if you use special characters in an external ID, you will have to convert them to retrieve the order through our tracking. For this reason, we recommend not using special characters.",
+      "type": "string"
+    },
+    "OrderStatus": {
+      "title": "OrderStatus",
+      "type": "object",
+      "properties": {
+        "cod_currency": {
+          "type": "string",
+          "description": "Currency code in ISO 4217 format.",
+          "enum": [
+            "EUR",
+            "GBP"
+          ]
+        },
+        "cod_value": {
+          "description": "Amount of cash on delivery.",
+          "type": "number"
+        },
+        "customer": {
+          "description": "Customer name.",
+          "$ref": "#/$defs/Customer"
+        },
+        "delivery_address": {
+          "$ref": "#/$defs/Address"
+        },
+        "delivery_attempt": {
+          "description": "Number of delivery attempts made.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "delivery_instructions": {
+          "description": "Optional delivery instructions for Paack.",
+          "type": "string"
+        },
+        "delivery_type": {
+          "description": "Whether delivery is direct or reverse.",
+          "type": "string"
+        },
+        "event_description": {
+          "description": "Description of an event that happens on route. Events trigger information that affect an order's status in the Paack system.",
+          "type": "string"
+        },
+        "event_id": {
+          "description": "Unique ID identifying an event.",
+          "type": "string"
+        },
+        "event_name": {
+          "description": "Name of an event.",
+          "type": "string"
+        },
+        "expected_delivery_ts": {
+          "$ref": "#/$defs/WindowObject"
+        },
+        "expected_pick_up_ts": {
+          "$ref": "#/$defs/WindowObject"
+        },
+        "external_order_id": {
+          "description": "Unique external identifier of an order.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Universal unique ID of the order returned by the Pull API. This is different from the order_id returned by the Order Management API.",
+          "type": "string"
+        },
+        "insured_currency": {
+          "description": "Amount of money insured.",
+          "type": "string"
+        },
+        "insured_value": {
+          "format": "double",
+          "type": "number"
+        },
+        "is_open": {
+          "description": "A boolean value which is stored for each order.",
+          "type": "boolean"
+        },
+        "order_details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Detail"
+          }
+        },
+        "order_id": {
+          "description": "The internal unique ID of an order in Paack.",
+          "type": "string"
+        },
+        "order_status": {
+          "description": "Status of an order which gives information about what stage an order is at.",
+          "type": "string"
+        },
+        "parcels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Parcel"
+          }
+        },
+        "parent_id": {
+          "description": "Unique order ID that is created and assigned to an order when a delivery attempt has failed.",
+          "type": "string"
+        },
+        "pick_up_address": {
+          "$ref": "#/$defs/Address"
+        },
+        "pick_up_instructions": {
+          "description": "Specific instructions for Paack to follow when picking up an order.",
+          "type": "string"
+        },
+        "proof_of_delivery": {
+          "description": "Unique base 64 image that provides proof that a delivery was made.",
+          "type": "string"
+        },
+        "retailer_id": {
+          "description": "A GUID identifying the retailer; assigned by Paack.",
+          "type": "string"
+        },
+        "service_type": {
+          "description": "Code that identifies the delivery day type, timeslot type, and available slot length.",
+          "type": "string",
+          "enum": [
+            "ST2 (Same day delivery)",
+            "NT2 (Next day delivery)"
+          ]
+        },
+        "tracking_id": {
+          "description": "The unique ID assigned to an order for tracking purposes.",
+          "type": "string"
+        },
+        "tracking_url": {
+          "description": "The endpoint that stores the tracking data of an order. It is used to access the end customer tracking page.",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "A timestamp field specifying when the order was updated.",
+          "type": "string"
+        },
+        "vehicle_type": {
+          "description": "The type of vehicle used to make the order.",
+          "type": "string"
+        }
+      }
+    },
+    "Parcel": {
+      "title": "Parcel",
+      "description": " The Parcels included in the order.",
+      "type": "object",
+      "properties": {
+        "barcode": {
+          "description": " Barcode identifier.",
+          "type": "string"
+        },
+        "height": {
+          "description": " The height of the parcel.",
+          "type": "number"
+        },
+        "id": {
+          "description": " Parcel UUID indentifier.",
+          "type": "string"
+        },
+        "length": {
+          "description": " The length of the parcel.",
+          "type": "number"
+        },
+        "order_id": {
+          "description": "The internal unique ID of an order in Paack.",
+          "type": "string"
+        },
+        "status": {
+          "description": "Information about what is happening to a parcel.",
+          "type": "string"
+        },
+        "weight": {
+          "description": " Parcel weight.",
+          "type": "number"
+        },
+        "width": {
+          "description": " Parcel width.",
+          "type": "number"
+        }
+      }
+    },
+    "WindowDatetime": {
+      "title": "WindowDatetime",
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        }
+      }
+    },
+    "WindowObject": {
+      "title": "WindowObject",
+      "description": "Timeslot defined by the objects start and end.",
+      "type": "object",
+      "properties": {
+        "end": {
+          "$ref": "#/$defs/WindowDatetime"
+        },
+        "start": {
+          "$ref": "#/$defs/WindowDatetime"
+        }
+      }
+    }
+  }
+}

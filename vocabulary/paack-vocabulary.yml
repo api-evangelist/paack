@@ -1,0 +1,442 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/paack-api-authentication-openapi.yml
+- openapi/paack-coverage-api-openapi.yml
+- openapi/paack-labeler-api-openapi.yml
+- openapi/paack-orders-api-openapi.yml
+- openapi/paack-tracking-pull-api-openapi.yml
+vocabulary:
+  name: Paack Domain Vocabulary
+  description: 'Terms declared by Paack''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-14'
+  terms:
+  - term: CountryCode
+    definition: Country code in ISO 3166 alpha 2 format.
+    tags:
+    - Enumeration
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/CountryCode
+  - term: CountryZone
+    definition: Country code in ISO 3166 alpha 2 format. Currently, the postcode zones are defined for Portugal and Great Britain.
+    tags:
+    - Enumeration
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/CountryZone
+  - term: CoverageZone
+    definition: Coverage zone. Learn more [here](./postcode-zones).
+    tags:
+    - Object
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/CoverageZone
+  - term: CoverageCode
+    definition: Postcode of the location.
+    tags:
+    - Object
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/CoverageCode
+  - term: Postcode
+    definition: 'Object declared by the contract with fields: country, coverage_code.'
+    tags:
+    - Object
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/Postcode
+  - term: Postcode zone
+    definition: 'Object declared by the contract with fields: country, coverage_zone.'
+    tags:
+    - Object
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/Zone
+  - term: Bad request
+    definition: 'Object declared by the contract with fields: error.'
+    tags:
+    - Object
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/CheckCoverageResponse400
+  - term: Authorization issue
+    definition: 'Object declared by the contract with fields: code, message.'
+    tags:
+    - Object
+    source: openapi/paack-coverage-api-openapi.yml#/components/schemas/CheckCoverageResponse401
+  - term: AddressDelivery
+    definition: 'Specifies the address of the delivery. **Display limits**: * `city` can take up to 58 characters. * A max. of approx. 60 characters
+      (2 graphic lines) can be displayed for `line1` and `line2` combined. * A max. of approx. 30 characters can be displayed for `line2`.'
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/AddressDelivery
+  - term: AddressPickup
+    definition: 'Specifies the pickup address. **Display limits**: * `city` can take up to 43 characters. * A max. of approx. 43 characters (2
+      graphic lines) can be displayed for `line1` and `line2` combined. * A max. of approx. 22 characters can be displayed for `line2`.'
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/AddressPickup
+  - term: Defines the request to generate labels.
+    definition: 'Object declared by the contract with fields: customer, delivery_address, delivery_type, expected_delivery_ts, external_id, order_details,
+      parcel_number, parcels, pick_up_address, retailer_name, service_type, template_id.'
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/CreateLabelRequestJson
+  - term: CreateLabelRequestJsonCustomer
+    definition: 'Contains the properties `first_name` and `last_name`. **PDF Display limits**: * `first_name` and `last_name` combined can take
+      up to 45 characters (2 graphic lines). * A max. of approx. 23 characters can be displayed for `last_name`. **ZPL Display limits**: * `first_name`
+      and `last_name` combined can take up to 29 characters (1 graphic line). * A max. of approx. 23 characters can be displayed for '
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/CreateLabelRequestJsonCustomer
+  - term: CreateLabelRequestJsonOrderDetails
+    definition: 'Contains the properties `name`, `type`, and `value`. Specifies custom information on the order. In case of `"name": "sale_number"`
+      and `"type": "string"`, the `value` appears on the label instead of the `external_id`.'
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/CreateLabelRequestJsonOrderDetails
+  - term: CreateLabelRequestJsonParcelNumber
+    definition: For ZPL labels, (`template_id` = `1` or `template_id` = `2`), specifies either the first parcel or all parcels from the `parcels[]`
+      array to return. For PDF labels, all parcels from the `parcels[]` array are returned in the response.
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/CreateLabelRequestJsonParcelNumber
+  - term: CreateLabelRequestJsonParcelsElem
+    definition: 'Defines the parcels included in the order. Each object included in this array corresponds to one parcel identified by its `barcode`.
+      **Display limits**: * The dimensions are not displayed if all three values are 0.'
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/CreateLabelRequestJsonParcelsElem
+  - term: CreateLabelRequestJsonTemplateId
+    definition: Defines the format of the label. `1` is for a single ZPL label, `2` is for printing multiple ZPL labels at once; `null` or missing
+      property returns a PDF.
+    tags:
+    - Enumeration
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/CreateLabelRequestJsonTemplateId
+  - term: ErrorSchema
+    definition: Contains the properties `code` and `message`.
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/ErrorSchema
+  - term: WindowDatetime
+    definition: Contains the properties `date` and `time`.
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/WindowDatetime
+  - term: WindowObject
+    definition: Contains the objects `start` and `end` indicating the order delivery's timeslot.
+    tags:
+    - Object
+    source: openapi/paack-labeler-api-openapi.yml#/components/schemas/WindowObject
+  - term: Address
+    definition: 'Object declared by the contract with fields: city, country, line1, post_code.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Address
+  - term: Customer
+    definition: Information on the person receiving the parcels.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Customer
+  - term: AddOrderRequest
+    definition: 'Object declared by the contract with fields: external_id, customer, delivery_address, expected_delivery_ts, delivery_instructions,
+      delivery_type, service_type, parcels, order_details, pick_up_address, ❗expected_pick_up_ts, pick_up_instructions. (7 more)'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/AddOrderRequest
+  - term: Status
+    definition: Status of the order. `draft` if just created. Corresponds to the `order_status` field in the [webhook output](./webhook-output).
+    tags:
+    - Enumeration
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Status
+  - term: NullField
+    definition: 'null'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/NullField
+  - term: Source
+    definition: Endpoint that triggered the response.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Source
+  - term: ErrorId
+    definition: Response identifier you can refer us to in case of problems.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ErrorId
+  - term: CodValue
+    definition: Amount of cash on delivery. Not persisted if the value equals 0.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/CodValue
+  - term: Cluster
+    definition: ':construction: Identifiers that associate orders with each other. Learn more [here](./reverse-logistics). Note that, as of now,
+      the array cannot be retrieved through a GET request.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Cluster
+  - term: DeliveryInstructions
+    definition: Instructions for the delivery.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/DeliveryInstructions
+  - term: UndeliverableInstructions
+    definition: ':construction: Currently input for this information is not persisted by Paack. Value equals the pickup instructions when retrieved
+      through the GET method.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/UndeliverableInstructions
+  - term: Label
+    definition: base64-encoded label.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Label
+  - term: AddOrderRequestParcelsElem
+    definition: 'Object declared by the contract with fields: barcode, height, length, width, weight, type, parcel_details.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/AddOrderRequestParcelsElem
+  - term: ResponseCreateErrorObject
+    definition: 'Object declared by the contract with fields: status, source, code, detail.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ResponseCreateErrorObject
+  - term: ResponseCreateError500Object
+    definition: 'Object declared by the contract with fields: id, status, source, code, detail.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ResponseCreateError500Object
+  - term: ResponseAuthErrorObject
+    definition: 'Object declared by the contract with fields: id, status, source, code, detail.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ResponseAuthErrorObject
+  - term: ResponseForbiddenErrorObject
+    definition: 'Object declared by the contract with fields: id, status, source, code, detail.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ResponseForbiddenErrorObject
+  - term: AddCustomPropertiesString
+    definition: 'Object declared by the contract with fields: name, type, value.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/AddCustomPropertiesString
+  - term: ParcelsElemType
+    definition: ':construction: Currently input for this information is not persisted by Paack. Value equals `standard` when retrieved through
+      the GET method.'
+    tags:
+    - Enumeration
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ParcelsElemType
+  - term: Date
+    definition: Date in `YYYY-MM-DD` format.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Date
+  - term: ExternalIdOrder
+    definition: Order's ID assigned by the retailer; unique within all the retailer's orders manifested to Paack. Can include special characters,
+      excluding a comma, though for further use you need to [encode them](./special-characters). `external_id` equals `tracking_id`.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ExternalIdOrder
+  - term: Time
+    definition: UTC time in `hh:mm:ss` format.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Time
+  - term: Country
+    definition: Country in ISO 3166 alpha 2 format.
+    tags:
+    - Enumeration
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Country
+  - term: City
+    definition: City.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/City
+  - term: Line1
+    definition: Primary address.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Line1
+  - term: Line2
+    definition: Additional address information.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Line2
+  - term: DeliveryType
+    definition: Type of the delivery. Learn more [here](./reverse-logistcs).
+    tags:
+    - Enumeration
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/DeliveryType
+  - term: NotPersisted
+    definition: ':construction: Currently input for this information is not persisted by Paack so it cannot be retrieved through the GET method.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/NotPersisted
+  - term: ServiceType
+    definition: Code that identifies the delivery day type, timeslot type, and available slot length. Learn more [here](./service-types).
+    tags:
+    - Enumeration
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ServiceType
+  - term: HasGdprConsent
+    definition: Whether the customer gave their GDPR consent.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/HasGdprConsent
+  - term: FirstName
+    definition: Customer's first or full name. If the `last_name` value is not specified, the full name is split and persisted in both fields.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/FirstName
+  - term: LastName
+    definition: Customer's last name. If not specified in the input, the last part of the first name is persisted in this field.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/LastName
+  - term: Email
+    definition: Customer's email address.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Email
+  - term: Phone
+    definition: Customer's phone number with the country prefix.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Phone
+  - term: CustomerAddressNotPersisted
+    definition: ':construction: Currently input for this information is not persisted by Paack. Value equals the delivery address when retrieved
+      through the GET method.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/CustomerAddressNotPersisted
+  - term: UndeliverableAddressNotPersisted
+    definition: ':construction: Currently input for this information is not persisted by Paack. Value equals the pickup address when retrieved
+      through the GET method.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/UndeliverableAddressNotPersisted
+  - term: OrderDetails
+    definition: 'Properties describing the order. :construction: Currently only the string property `sale_number`, assigning the order a custom
+      identifier, is persisted by Paack and can be retrieved through the GET method.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/OrderDetails
+  - term: Currency
+    definition: Currency code in ISO 4217 format.
+    tags:
+    - Enumeration
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Currency
+  - term: DeliveryAddress
+    definition: Delivery address.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/DeliveryAddress
+  - term: PickupAddress
+    definition: Pickup address.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/PickupAddress
+  - term: ResponseRetrieveErrorObject
+    definition: 'Object declared by the contract with fields: id, status, source, detail.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ResponseRetrieveErrorObject
+  - term: Response404ErrorObject
+    definition: 'Object declared by the contract with fields: id, status, source, code, detail.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Response404ErrorObject
+  - term: Line1Line2
+    definition: Primary and additional address information. Persists merged input from fields `line1` and `line2`.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/Line1Line2
+  - term: UpdateOrderRequest
+    definition: Defines the request to update the specified order.
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/UpdateOrderRequest
+  - term: ResponseError
+    definition: 'Object declared by the contract with fields: msg.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ResponseError
+  - term: ConfigurationResponse
+    definition: 'Object declared by the contract with fields: data, error.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/ConfigurationResponse
+  - term: VerificationData
+    definition: 'Object declared by the contract with fields: data.'
+    tags:
+    - Object
+    source: openapi/paack-orders-api-openapi.yml#/components/schemas/VerificationData
+  - term: Detail
+    definition: Specifies additional properties of the order. A property called `sale_number` stores the order's custom identifier. Note that
+      the properties are persisted by Paack although you cannot retrieve them through the GET method. The supported types are `string`, `number`,
+      `boolean`, `object`, `array`, and `null`. For better user experience, only `string`, `number`, and `boolean` are displayed in this doc
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/Detail
+  - term: ExternalId
+    definition: Order's ID assigned by the retailer; unique within all the retailer's orders manifested to Paack. Can include special characters
+      but excluding a comma. Note that if you use special characters in an external ID, you will have to convert them to retrieve the order through
+      our tracking. For this reason, we recommend not using special characters.
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/ExternalId
+  - term: SaleNumber
+    definition: Sale ID assigned by the retailer; unique within all the retailer's orders manifested to Paack. Can include special characters
+      but excluding a comma. Note that if you use special characters in a sale number, you will have to convert them to retrieve the order through
+      our tracking. For this reason, we recommend not using special characters.
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/SaleNumber
+  - term: Barcode
+    definition: Barcode identifier of a parcel within an order.
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/Barcode
+  - term: DeliveryDetails
+    definition: Option to show delivery events in details.
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/DeliveryDetails
+  - term: OrderStatus
+    definition: 'Object declared by the contract with fields: cod_currency, cod_value, customer, delivery_address, delivery_attempt, delivery_instructions,
+      delivery_type, event_description, event_id, event_name, expected_delivery_ts, expected_pick_up_ts. (19 more)'
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/OrderStatus
+  - term: Parcel
+    definition: The Parcels included in the order.
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/Parcel
+  - term: statusGetResponse
+    definition: 'Object declared by the contract with fields: data, error.'
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/statusGetResponse
+  - term: statusListResponse
+    definition: 'Object declared by the contract with fields: data, error.'
+    tags:
+    - Object
+    source: openapi/paack-tracking-pull-api-openapi.yml#/components/schemas/statusListResponse
+  - term: Get access token
+    definition: 'Resource group in the contract; its operation POST /token: Lets you authenticate to Paack APIs.'
+    tags:
+    - Resource Group
+    source: openapi/paack-api-authentication-openapi.yml
+  - term: Check coverage
+    definition: 'Resource group in the contract; its operation GET /coverage: Verifies whether the postcode or postcode zone specified in the
+      query parameter is covered by Paack.'
+    tags:
+    - Resource Group
+    source: openapi/paack-coverage-api-openapi.yml
+  - term: Generate labels
+    definition: 'Resource group in the contract; its operation POST /labels: Generates labels for an order.The body of the call to the Labeler
+      API uses a structured JSON format with mandatory and optional fields.'
+    tags:
+    - Resource Group
+    source: openapi/paack-labeler-api-openapi.yml
+  - term: Manage orders
+    definition: 'Resource group in the contract; its operation POST /public/v3/orders: Creates an order for Paack.'
+    tags:
+    - Resource Group
+    source: openapi/paack-orders-api-openapi.yml
+  - term: Retrieve delivery proof
+    definition: 'Resource group in the contract; its operation GET /public/v3/orders/{external_id}/delivery_verifications: Retrieves delivery
+      proof for the order of the external ID specified in the path parameter.'
+    tags:
+    - Resource Group
+    source: openapi/paack-orders-api-openapi.yml

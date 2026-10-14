@@ -1,0 +1,205 @@
+[
+ {
+  "page": "https://paack.readme.io/reference/token.md",
+  "definition": {
+   "components": {
+    "responses": {
+     "IssueResponse": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "properties": {
+          "error": {
+           "default": "access_denied",
+           "description": "Error code.",
+           "type": "string"
+          },
+          "error_description": {
+           "default": "Unauthorized",
+           "description": "Error message.",
+           "type": "string"
+          }
+         },
+         "type": "object"
+        },
+        "example": {
+         "error": "access_denied",
+         "error_description": "Unauthorized"
+        }
+       }
+      },
+      "description": "In case of authentication issues (e.g., invalid client ID or client secret) you get an `HTTP 401` response."
+     },
+     "Forbidden": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "properties": {
+          "error": {
+           "default": "access_denied",
+           "description": "Error code.",
+           "type": "string"
+          },
+          "error_description": {
+           "description": "Error message.",
+           "type": "string"
+          }
+         },
+         "type": "object"
+        },
+        "example": {
+         "error": "access_denied",
+         "error_description": "Client is not authorized to access \"https://api.oms.production.paack.app\". You need to create a \"client-grant\" associated to this API. See: https://auth0.com/docs/api/v2#!/Client_Grants/post_client_grants"
+        }
+       }
+      },
+      "description": "In case of no rights to access the specified API you get an `HTTP 403` response."
+     },
+     "OkResponse": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "properties": {
+          "access_token": {
+           "description": "JSON Web Token used to authorize to Paack APIs.",
+           "type": "string"
+          },
+          "expires_in": {
+           "default": 86400,
+           "description": "Number of seconds the `access_token` is valid (24 hours).",
+           "type": "integer"
+          },
+          "token_type": {
+           "default": "Bearer",
+           "description": "The API authorization method for the `access_token` to be used.",
+           "type": "string"
+          }
+         },
+         "type": "object"
+        },
+        "example": {
+         "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjJtc01WanRaOFc3OGpkV3lvQW01MCJ9.eyJodHRwczovL3BhYWNrLmNvIjp7IlJldGFpbGVySUQiOiJSZXRhaWxlci1QYWFjayBSZXRhaWxlci1NMk0iLCJpZCI6ImUwYTlhZjQwLTkzYWMtNDQzYy04OTE4LWNjZWRjZmM0YWJkNCJ9LCJpc3MiOiJodHRwczovL3BhYWNrLWhxLXN0YWdpbmcuZXUuYXV0aDAuY29tLyIsInN1YiI6IjQxTTY4clo0bjBYbWllSG9Cbk1nWHB2a0lhaTE4cHRXQGNsaWVudHMiLCJhdWQiOiJodHRwczovL2dnbC1zdGctZ2NwLWd3IiwiaWF0IjoxNjQ5MDc0MjMxLCJleHAiOjE2NDkxNjA2MzEsImF6cCI6IjQxTTY4clo0bjBYbWllSG9Cbk1nWHB2a0lhaTE4cHRXJiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.MkFPyVDHKaFBzjNGYTeiYu4gB8_UvgZsIb0Crb1LcHXwiNWPDzGZmi_mnLNTSRLN6V-OSy3lhtunNMkwwdjMaH3T07EPhy-2yBx9akRdb6w6xBcuMYQ2cAdYTqQlXvjUQ1TZkKTjABBu8ypk6fJzyDG67r96nX7ZsvOk8Nl8LVjzBjwY0PdPym_FzvEMV4d-kckVCh7Y1IXoSIXd4ATitEBEpCrY6lBcOCk9YNe6nl9ZINOK4QHsIzz-3N5uUnsRdc6VLsFCTGAzRtS6Skg-HdDHcvopE33T3E51mFbtu6f-s7WfXdz5AftSJKLywwQ_FaI1q1I-mbjwhMYSF9ELNQ",
+         "expires_in": 86400,
+         "token_type": "Bearer"
+        }
+       }
+      },
+      "description": "If your authentication request has returned an `HTTP 200` response, it provided also your `access_token`."
+     }
+    }
+   },
+   "info": {
+    "description": "Authentication to Paack APIs.",
+    "title": "Paack API Authentication",
+    "version": "3"
+   },
+   "openapi": "3.1.0",
+   "paths": {
+    "/token": {
+     "post": {
+      "description": "Lets you authenticate to Paack APIs. Successful authentication provides an `access token` you must forward with every call to our APIs.<br /><br />The Staging environment allows you to test the APIs to see if they produce your desired results. When you are satisfied that everything works well, you can move on to the Production environment.<br /><br />The Production environment allows you to make your confirmed requests to Paack APIs.<br /><br /> You can find a definition in JSON format of our authentication API [here](https://drive.google.com/drive/folders/1u9Ja61PjXDGSJYoMnbFKfGI2bWmbbyvk).",
+      "operationId": "token",
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "description": "Defines the request to authenticate to Paack APIs.",
+          "properties": {
+           "audience": {
+            "description": "Identifier of the Paack APIs. Depends on the environment: `https://ggl-pro-gcp-gw` is for Production, `https://ggl-stg-gcp-gw` is for Staging.",
+            "type": "string",
+            "oneOf": [
+             {
+              "title": "Production",
+              "default": "https://ggl-pro-gcp-gw"
+             },
+             {
+              "title": "Staging",
+              "default": "https://ggl-stg-gcp-gw"
+             }
+            ]
+           },
+           "client_id": {
+            "description": "Part of your credentials received from the Customer Solutions team.",
+            "type": "string"
+           },
+           "client_secret": {
+            "description": "Part of your credentials received from the Customer Solutions team.",
+            "type": "string"
+           },
+           "grant_type": {
+            "default": "client_credentials",
+            "description": "",
+            "enum": [
+             "client_credentials"
+            ],
+            "type": "string"
+           }
+          },
+          "required": [
+           "client_id",
+           "client_secret",
+           "audience",
+           "grant_type"
+          ],
+          "type": "object"
+         },
+         "example": {
+          "client_id": "bCK0bpFNjhKO6JB2boAoQ4goTwOoffhp",
+          "client_secret": "MaCGqWs8D7UOggEmwrfgXKeeao0eysxvAfVvGaANLae1kYEjcdVDU5iaM82tQff3",
+          "audience": "https://api.oms.production.paack.app",
+          "grant_type": "client_credentials"
+         }
+        }
+       },
+       "description": "Returns an access token used for authorization to our APIs."
+      },
+      "responses": {
+       "200": {
+        "$ref": "#/components/responses/OkResponse"
+       },
+       "401": {
+        "$ref": "#/components/responses/IssueResponse"
+       },
+       "403": {
+        "$ref": "#/components/responses/Forbidden"
+       }
+      },
+      "tags": [
+       "Get access token"
+      ]
+     }
+    }
+   },
+   "security": [],
+   "servers": [
+    {
+     "url": "https://paack-hq-production.eu.auth0.com/oauth"
+    },
+    {
+     "url": "https://paack-hq-staging.eu.auth0.com/oauth"
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   },
+   "_id": {
+    "buffer": {
+     "0": 98,
+     "1": 215,
+     "2": 156,
+     "3": 252,
+     "4": 197,
+     "5": 13,
+     "6": 198,
+     "7": 0,
+     "8": 82,
+     "9": 69,
+     "10": 93,
+     "11": 86
+    }
+   }
+  }
+ }
+]

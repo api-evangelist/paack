@@ -1,0 +1,199 @@
+openapi: 3.1.0
+info:
+  title: Coverage API
+  description: Find an up-to-date version of these API docs in Confluence at https://paacklogistics.atlassian.net/wiki/spaces/PD/pages/3341320193
+  contact:
+    email: tech.writers@paack.co
+  version: 3.0.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+- url: https://paack.io/api/v3
+  description: Production environment
+- url: https://api-shm-sta.paack.io
+  description: Staging environment
+security:
+- Bearer: []
+paths:
+  /coverage:
+    get:
+      description: 'Verifies whether the postcode or postcode zone specified in the query parameter is covered by Paack.
+
+
+        Returns all the covered postcodes and postcode zones if no query parameter is specified.'
+      operationId: coverage
+      parameters:
+      - name: Filtering
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: object
+          oneOf:
+          - title: Postcode
+            properties:
+              country:
+                $ref: '#/components/schemas/CountryCode'
+              coverage_code:
+                $ref: '#/components/schemas/CoverageCode'
+            required:
+            - country
+            - coverage_code
+          - title: Postcode zone
+            properties:
+              country:
+                $ref: '#/components/schemas/CountryZone'
+              coverage_zone:
+                $ref: '#/components/schemas/CoverageZone'
+            required:
+            - country
+            - coverage_zone
+      responses:
+        '200':
+          description: If you specified the query parameters, returns either "coverage" or "no coverage". Otherwise returns all covered postcodes and postcode zones.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckCoverageResponse200'
+        '400':
+          description: Returned in case of validation errors. The details of the issue are displayed in the `error.message` field. To ensure a correct validation of a request, all mandatory parameters must be defined in the query.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckCoverageResponse400'
+        '401':
+          description: Communicates a missing or expired access token for authorization.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckCoverageResponse401'
+      tags:
+      - Check coverage
+    parameters: []
+components:
+  schemas:
+    CountryCode:
+      type: string
+      description: Country code in ISO 3166 alpha 2 format.
+      enum:
+      - ES
+      - PT
+      - GB
+      - FR
+      - IT
+    CountryZone:
+      type: string
+      description: Country code in ISO 3166 alpha 2 format. Currently, the postcode zones are defined for Portugal and Great Britain.
+      enum:
+      - PT
+      - GB
+    CoverageZone:
+      type: string
+      minLength: 2
+      description: Coverage zone. Learn more [here](./postcode-zones).
+    CoverageCode:
+      type: string
+      minLength: 2
+      description: Postcode of the location.
+    Postcode:
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/CountryCode'
+        coverage_code:
+          $ref: '#/components/schemas/CoverageCode'
+    Zone:
+      title: Postcode zone
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/CountryZone'
+        coverage_zone:
+          $ref: '#/components/schemas/CoverageZone'
+    CheckCoverageResponse200:
+      title: Covered
+      type: object
+      oneOf:
+      - title: Request had query parameters
+        example:
+          message: coverage
+        properties:
+          message:
+            type: string
+            enum:
+            - coverage
+            - no coverage
+      - title: Request didn't have query parameters
+        example:
+          coverage_codes:
+          - country: IT
+            coverage_code: '20123'
+          - country: ES
+            coverage_code: '46749'
+          coverage_zones:
+          - country: PT
+            coverage_zone: '4700'
+          - country: DE
+            coverage_zone: '24'
+        properties:
+          coverage_codes:
+            type: array
+            items:
+              $ref: '#/components/schemas/Postcode'
+          coverage_zones:
+            type: array
+            items:
+              $ref: '#/components/schemas/Zone'
+    CheckCoverageResponse400:
+      title: Bad request
+      type: object
+      example:
+        error:
+          code: PC041
+          message: 'dcByPostCodesGetter: multi error: coverage_code or coverage_zone is required field'
+      properties:
+        error:
+          description: Contains the error code and its details.
+          type: object
+          properties:
+            code:
+              description: Error code.
+              type: string
+            message:
+              description: Error details.
+              type: string
+    CheckCoverageResponse401:
+      title: Authorization issue
+      type: object
+      properties:
+        code:
+          description: HTTP response code.
+          type: number
+          enum:
+          - 401
+        message:
+          description: Error details.
+          type: string
+          enum:
+          - Jwt is missing
+          - Jwt is expired
+      example:
+        code: 401
+        message: Jwt is missing
+  securitySchemes:
+    Bearer:
+      in: header
+      name: Authorization
+      type: apiKey
+x-provenance:
+  method: searched
+  source: https://paack.readme.io/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://paack.readme.io/reference/coverage.md
+  merge:
+    pages: 1
+    deduped: 0
+    conflicts_kept_first: 0

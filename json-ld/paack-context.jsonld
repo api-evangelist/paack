@@ -1,0 +1,342 @@
+{
+  "@context": {
+    "@vocab": "https://paack.co/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "paack": "https://paack.co/schema#",
+    "CountryCode": "paack:CountryCode",
+    "CountryZone": "paack:CountryZone",
+    "Postcode": "paack:Postcode",
+    "country": {
+      "@id": "paack:country",
+      "@type": "@id"
+    },
+    "coverage_code": {
+      "@id": "paack:coverage_code",
+      "@type": "@id"
+    },
+    "Zone": "paack:Zone",
+    "coverage_zone": {
+      "@id": "paack:coverage_zone",
+      "@type": "@id"
+    },
+    "CheckCoverageResponse400": "paack:CheckCoverageResponse400",
+    "error": {
+      "@id": "paack:error"
+    },
+    "CheckCoverageResponse401": "paack:CheckCoverageResponse401",
+    "code": {
+      "@id": "paack:code",
+      "@type": "xsd:decimal"
+    },
+    "message": {
+      "@id": "paack:message",
+      "@type": "xsd:string"
+    },
+    "AddressDelivery": "paack:AddressDelivery",
+    "city": {
+      "@id": "paack:city",
+      "@type": "xsd:string"
+    },
+    "line1": {
+      "@id": "paack:line1",
+      "@type": "xsd:string"
+    },
+    "line2": {
+      "@id": "paack:line2",
+      "@type": "xsd:string"
+    },
+    "post_code": {
+      "@id": "paack:post_code",
+      "@type": "xsd:string"
+    },
+    "AddressPickup": "paack:AddressPickup",
+    "CreateLabelRequestJson": "paack:CreateLabelRequestJson",
+    "customer": {
+      "@id": "paack:customer",
+      "@type": "@id"
+    },
+    "delivery_address": {
+      "@id": "paack:delivery_address",
+      "@type": "@id"
+    },
+    "delivery_type": {
+      "@id": "paack:delivery_type",
+      "@type": "xsd:string"
+    },
+    "expected_delivery_ts": {
+      "@id": "paack:expected_delivery_ts",
+      "@type": "@id"
+    },
+    "external_id": {
+      "@id": "paack:external_id",
+      "@type": "xsd:string"
+    },
+    "order_details": {
+      "@id": "paack:order_details",
+      "@container": "@list"
+    },
+    "parcel_number": {
+      "@id": "paack:parcel_number",
+      "@type": "@id"
+    },
+    "parcels": {
+      "@id": "paack:parcels",
+      "@container": "@list"
+    },
+    "pick_up_address": {
+      "@id": "paack:pick_up_address",
+      "@type": "@id"
+    },
+    "retailer_name": {
+      "@id": "paack:retailer_name",
+      "@type": "xsd:string"
+    },
+    "service_type": {
+      "@id": "paack:service_type",
+      "@type": "xsd:string"
+    },
+    "template_id": {
+      "@id": "paack:template_id",
+      "@type": "@id"
+    },
+    "CreateLabelRequestJsonCustomer": "paack:CreateLabelRequestJsonCustomer",
+    "first_name": {
+      "@id": "paack:first_name",
+      "@type": "xsd:string"
+    },
+    "last_name": {
+      "@id": "paack:last_name",
+      "@type": "xsd:string"
+    },
+    "CreateLabelRequestJsonOrderDetails": "paack:CreateLabelRequestJsonOrderDetails",
+    "name": {
+      "@id": "paack:name",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "paack:type",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "paack:value",
+      "@type": "xsd:string"
+    },
+    "CreateLabelRequestJsonParcelsElem": "paack:CreateLabelRequestJsonParcelsElem",
+    "barcode": {
+      "@id": "paack:barcode",
+      "@type": "xsd:string"
+    },
+    "height": {
+      "@id": "paack:height",
+      "@type": "xsd:decimal"
+    },
+    "length": {
+      "@id": "paack:length",
+      "@type": "xsd:decimal"
+    },
+    "weight": {
+      "@id": "paack:weight",
+      "@type": "xsd:decimal"
+    },
+    "sku": {
+      "@id": "paack:sku",
+      "@type": "xsd:string"
+    },
+    "width": {
+      "@id": "paack:width",
+      "@type": "xsd:decimal"
+    },
+    "CreateLabelRequestJsonTemplateId": "paack:CreateLabelRequestJsonTemplateId",
+    "ErrorSchema": "paack:ErrorSchema",
+    "WindowDatetime": "paack:WindowDatetime",
+    "date": {
+      "@id": "paack:date",
+      "@type": "xsd:string"
+    },
+    "time": {
+      "@id": "paack:time",
+      "@type": "xsd:string"
+    },
+    "WindowObject": "paack:WindowObject",
+    "end": {
+      "@id": "paack:end",
+      "@type": "@id"
+    },
+    "start": {
+      "@id": "paack:start",
+      "@type": "@id"
+    },
+    "Address": "paack:Address",
+    "Customer": "paack:Customer",
+    "email": {
+      "@id": "paack:email",
+      "@type": "@id"
+    },
+    "AddOrderRequest": "paack:AddOrderRequest",
+    "delivery_instructions": {
+      "@id": "paack:delivery_instructions",
+      "@type": "@id"
+    },
+    "pick_up_instructions": {
+      "@id": "paack:pick_up_instructions",
+      "@type": "xsd:string"
+    },
+    "cod_value": {
+      "@id": "paack:cod_value",
+      "@type": "@id"
+    },
+    "cod_currency": {
+      "@id": "paack:cod_currency",
+      "@type": "@id"
+    },
+    "clusters": {
+      "@id": "paack:clusters",
+      "@type": "@id"
+    },
+    "undeliverable_address": {
+      "@id": "paack:undeliverable_address",
+      "@type": "@id"
+    },
+    "undeliverable_instructions": {
+      "@id": "paack:undeliverable_instructions",
+      "@type": "@id"
+    },
+    "insured_value": {
+      "@id": "paack:insured_value",
+      "@type": "@id"
+    },
+    "insured_currency": {
+      "@id": "paack:insured_currency",
+      "@type": "@id"
+    },
+    "Status": "paack:Status",
+    "AddOrderRequestParcelsElem": "paack:AddOrderRequestParcelsElem",
+    "parcel_details": {
+      "@id": "paack:parcel_details",
+      "@type": "@id"
+    },
+    "ResponseCreateErrorObject": "paack:ResponseCreateErrorObject",
+    "status": {
+      "@id": "paack:status",
+      "@type": "xsd:string"
+    },
+    "source": {
+      "@id": "paack:source",
+      "@type": "@id"
+    },
+    "detail": {
+      "@id": "paack:detail",
+      "@type": "xsd:string"
+    },
+    "ResponseCreateError500Object": "paack:ResponseCreateError500Object",
+    "id": {
+      "@id": "paack:id",
+      "@type": "@id"
+    },
+    "ResponseAuthErrorObject": "paack:ResponseAuthErrorObject",
+    "ResponseForbiddenErrorObject": "paack:ResponseForbiddenErrorObject",
+    "AddCustomPropertiesString": "paack:AddCustomPropertiesString",
+    "ParcelsElemType": "paack:ParcelsElemType",
+    "Country": "paack:Country",
+    "DeliveryType": "paack:DeliveryType",
+    "ServiceType": "paack:ServiceType",
+    "Currency": "paack:Currency",
+    "DeliveryAddress": "paack:DeliveryAddress",
+    "PickupAddress": "paack:PickupAddress",
+    "ResponseRetrieveErrorObject": "paack:ResponseRetrieveErrorObject",
+    "Response404ErrorObject": "paack:Response404ErrorObject",
+    "UpdateOrderRequest": "paack:UpdateOrderRequest",
+    "expected_pick_up_ts": {
+      "@id": "paack:expected_pick_up_ts",
+      "@type": "@id"
+    },
+    "ResponseError": "paack:ResponseError",
+    "msg": {
+      "@id": "paack:msg",
+      "@type": "xsd:string"
+    },
+    "ConfigurationResponse": "paack:ConfigurationResponse",
+    "data": {
+      "@id": "paack:data"
+    },
+    "VerificationData": "paack:VerificationData",
+    "Detail": "paack:Detail",
+    "OrderStatus": "paack:OrderStatus",
+    "delivery_attempt": {
+      "@id": "paack:delivery_attempt",
+      "@type": "xsd:integer"
+    },
+    "event_description": {
+      "@id": "paack:event_description",
+      "@type": "xsd:string"
+    },
+    "event_id": {
+      "@id": "paack:event_id",
+      "@type": "xsd:string"
+    },
+    "event_name": {
+      "@id": "paack:event_name",
+      "@type": "xsd:string"
+    },
+    "external_order_id": {
+      "@id": "paack:external_order_id",
+      "@type": "xsd:string"
+    },
+    "is_open": {
+      "@id": "paack:is_open",
+      "@type": "xsd:boolean"
+    },
+    "order_id": {
+      "@id": "paack:order_id",
+      "@type": "xsd:string"
+    },
+    "order_status": {
+      "@id": "paack:order_status",
+      "@type": "xsd:string"
+    },
+    "parent_id": {
+      "@id": "paack:parent_id",
+      "@type": "xsd:string"
+    },
+    "proof_of_delivery": {
+      "@id": "paack:proof_of_delivery",
+      "@type": "xsd:string"
+    },
+    "retailer_id": {
+      "@id": "paack:retailer_id",
+      "@type": "xsd:string"
+    },
+    "tracking_id": {
+      "@id": "paack:tracking_id",
+      "@type": "xsd:string"
+    },
+    "tracking_url": {
+      "@id": "paack:tracking_url",
+      "@type": "xsd:string"
+    },
+    "updated_at": {
+      "@id": "paack:updated_at",
+      "@type": "xsd:string"
+    },
+    "vehicle_type": {
+      "@id": "paack:vehicle_type",
+      "@type": "xsd:string"
+    },
+    "Parcel": "paack:Parcel",
+    "statusGetResponse": "paack:statusGetResponse",
+    "statusListResponse": "paack:statusListResponse"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Paack API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Paack's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-14) from openapi/paack-api-authentication-openapi.yml, openapi/paack-coverage-api-openapi.yml, openapi/paack-labeler-api-openapi.yml.",
+  "dcterms:created": "2026-10-14",
+  "dcterms:source": [
+    "openapi/paack-api-authentication-openapi.yml",
+    "openapi/paack-coverage-api-openapi.yml",
+    "openapi/paack-labeler-api-openapi.yml",
+    "openapi/paack-orders-api-openapi.yml",
+    "openapi/paack-tracking-pull-api-openapi.yml"
+  ]
+}

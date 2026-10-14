@@ -1,0 +1,508 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/paack/main/json-schema/paack-add-order-request-schema.json",
+  "title": "AddOrderRequest",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/paack-orders-api-openapi.yml#/components/schemas/AddOrderRequest",
+  "properties": {
+    "external_id": {
+      "$ref": "#/$defs/ExternalIdOrder"
+    },
+    "customer": {
+      "$ref": "#/$defs/CreateCustomer"
+    },
+    "delivery_address": {
+      "allOf": [
+        {
+          "description": "Delivery address."
+        },
+        {
+          "$ref": "#/$defs/RequestAddress"
+        }
+      ]
+    },
+    "expected_delivery_ts": {
+      "allOf": [
+        {
+          "description": "Expected date & time of the delivery."
+        },
+        {
+          "$ref": "#/$defs/WindowObject"
+        }
+      ]
+    },
+    "delivery_instructions": {
+      "$ref": "#/$defs/DeliveryInstructions"
+    },
+    "delivery_type": {
+      "$ref": "#/$defs/DeliveryType"
+    },
+    "service_type": {
+      "$ref": "#/$defs/ServiceType"
+    },
+    "parcels": {
+      "description": "Parcels included in the order. As for barcodes, generate them in the same way for both direct and reverse orders so you can use them for tracking.",
+      "items": {
+        "$ref": "#/$defs/AddOrderRequestParcelsElem"
+      },
+      "type": "array"
+    },
+    "order_details": {
+      "$ref": "#/$defs/OrderDetails"
+    },
+    "pick_up_address": {
+      "allOf": [
+        {
+          "description": "Pickup address. In case of reverse orders, this is the customer's address where the Paack driver should collect the parcels."
+        },
+        {
+          "$ref": "#/$defs/RequestAddress"
+        }
+      ]
+    },
+    "❗expected_pick_up_ts": {
+      "allOf": [
+        {
+          "description": "Expected date & time of the pickup. Not required for direct orders but is necessary for reverse and exchange orders. In the case of reverse orders, this is when the Paack driver should collect the parcels. Note that this field must contain the *same value* as the field `expected_delivery_ts` in an exchange scenario."
+        },
+        {
+          "$ref": "#/$defs/WindowObject"
+        }
+      ]
+    },
+    "pick_up_instructions": {
+      "description": "Instructions for the pickup.",
+      "type": "string"
+    },
+    "cod_value": {
+      "$ref": "#/$defs/CodValue"
+    },
+    "cod_currency": {
+      "$ref": "#/$defs/Currency"
+    },
+    "clusters": {
+      "$ref": "#/$defs/Cluster"
+    },
+    "undeliverable_address": {
+      "$ref": "#/$defs/UndeliverableAddressNotPersisted"
+    },
+    "undeliverable_instructions": {
+      "$ref": "#/$defs/UndeliverableInstructions"
+    },
+    "insured_value": {
+      "$ref": "#/$defs/NotPersisted"
+    },
+    "insured_currency": {
+      "$ref": "#/$defs/NotPersisted"
+    }
+  },
+  "required": [
+    "customer",
+    "delivery_address",
+    "expected_delivery_ts",
+    "external_id",
+    "service_type",
+    "pick_up_address"
+  ],
+  "type": "object",
+  "$defs": {
+    "AddCustomPropertiesString": {
+      "properties": {
+        "name": {
+          "description": "Name of the property.",
+          "default": "sale_number",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of the property.",
+          "enum": [
+            "string",
+            "array",
+            "boolean",
+            "null",
+            "number",
+            "object"
+          ],
+          "default": "string",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of the property.",
+          "type": "string",
+          "maxLength": 30
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "AddOrderRequestParcelsElem": {
+      "properties": {
+        "barcode": {
+          "description": "Barcode of the parcel.",
+          "type": "string",
+          "maxLength": 128
+        },
+        "height": {
+          "description": "Height of the parcel in cm.",
+          "format": "double",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 120
+        },
+        "length": {
+          "description": "Length of the parcel in cm.",
+          "format": "double",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 120
+        },
+        "width": {
+          "description": "Width of the parcel in cm.",
+          "format": "double",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 120
+        },
+        "weight": {
+          "description": "Actual weight of the parcel in kg.",
+          "format": "double",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 32
+        },
+        "type": {
+          "$ref": "#/$defs/ParcelsElemType"
+        },
+        "parcel_details": {
+          "$ref": "#/$defs/NotPersisted"
+        }
+      },
+      "required": [
+        "barcode"
+      ],
+      "type": "object"
+    },
+    "Address": {
+      "properties": {
+        "city": {
+          "$ref": "#/$defs/City"
+        },
+        "country": {
+          "$ref": "#/$defs/Country"
+        },
+        "line1": {
+          "$ref": "#/$defs/Line1"
+        },
+        "post_code": {
+          "$ref": "#/$defs/Postcode"
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "line1",
+        "post_code"
+      ],
+      "type": "object"
+    },
+    "City": {
+      "description": "City.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 128
+    },
+    "Cluster": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": ":construction: Identifiers that associate orders with each other. Learn more [here](./reverse-logistics). Note that, as of now, the array cannot be retrieved through a GET request."
+    },
+    "CodValue": {
+      "description": "Amount of cash on delivery. Not persisted if the value equals 0.",
+      "format": "double",
+      "minimum": 0,
+      "type": "number"
+    },
+    "Country": {
+      "description": "Country in ISO 3166 alpha 2 format.",
+      "enum": [
+        "ES",
+        "FR",
+        "GB",
+        "IT",
+        "PT"
+      ],
+      "type": "string"
+    },
+    "CreateCustomer": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Customer"
+        },
+        {
+          "properties": {
+            "phone": {
+              "$ref": "#/$defs/Phone"
+            },
+            "has_gdpr_consent": {
+              "$ref": "#/$defs/HasGdprConsent"
+            },
+            "address": {
+              "$ref": "#/$defs/CustomerAddressNotPersisted"
+            },
+            "external_id": {
+              "$ref": "#/$defs/NotPersisted"
+            },
+            "language": {
+              "$ref": "#/$defs/NotPersisted"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "Currency": {
+      "description": "Currency code in ISO 4217 format.",
+      "enum": [
+        "EUR",
+        "GBP"
+      ],
+      "type": "string"
+    },
+    "Customer": {
+      "description": "Information on the person receiving the parcels.",
+      "properties": {
+        "first_name": {
+          "$ref": "#/$defs/FirstName"
+        },
+        "last_name": {
+          "$ref": "#/$defs/LastName"
+        },
+        "email": {
+          "$ref": "#/$defs/Email"
+        }
+      },
+      "required": [
+        "first_name"
+      ],
+      "type": "object"
+    },
+    "CustomerAddressNotPersisted": {
+      "description": ":construction: Currently input for this information is not persisted by Paack. Value equals the delivery address when retrieved through the GET method.",
+      "type": "null"
+    },
+    "Date": {
+      "description": "Date in `YYYY-MM-DD` format.",
+      "maxLength": 10,
+      "minLength": 10,
+      "type": "string",
+      "format": "date"
+    },
+    "DeliveryInstructions": {
+      "description": "Instructions for the delivery.",
+      "type": "string",
+      "maxLength": 128
+    },
+    "DeliveryType": {
+      "description": "Type of the delivery. Learn more [here](./reverse-logistcs).",
+      "type": "string",
+      "enum": [
+        "direct",
+        "reverse"
+      ]
+    },
+    "Email": {
+      "description": "Customer's email address.",
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 128
+    },
+    "ExternalIdOrder": {
+      "description": "Order's ID assigned by the retailer; unique within all the retailer's orders manifested to Paack.\n\nCan include special characters, excluding a comma, though for further use you need to [encode them](./special-characters).\n\n`external_id` equals `tracking_id`.",
+      "maxLength": 128,
+      "type": "string"
+    },
+    "FirstName": {
+      "description": "Customer's first or full name. If the `last_name` value is not specified, the full name is split and persisted in both fields.",
+      "type": "string",
+      "maxLength": 128
+    },
+    "HasGdprConsent": {
+      "description": "Whether the customer gave their GDPR consent.",
+      "type": "boolean"
+    },
+    "LastName": {
+      "description": "Customer's last name. If not specified in the input, the last part of the first name is persisted in this field.",
+      "type": "string",
+      "maxLength": 128
+    },
+    "Line1": {
+      "description": "Primary address.",
+      "type": "string",
+      "maxLength": 128
+    },
+    "Line2": {
+      "description": "Additional address information.",
+      "type": "string",
+      "maxLength": 128
+    },
+    "NotPersisted": {
+      "description": ":construction: Currently input for this information is not persisted by Paack so it cannot be retrieved through the GET method.",
+      "type": "null"
+    },
+    "OrderDetails": {
+      "description": "Properties describing the order. :construction: Currently only the string property `sale_number`, assigning the order a custom identifier, is persisted by Paack and can be retrieved through the GET method.",
+      "items": {
+        "$ref": "#/$defs/AddCustomPropertiesString"
+      },
+      "type": "array",
+      "maxItems": 1
+    },
+    "ParcelsElemType": {
+      "description": ":construction: Currently input for this information is not persisted by Paack. Value equals `standard` when retrieved through the GET method.",
+      "type": "string",
+      "default": "standard",
+      "enum": [
+        "standard"
+      ]
+    },
+    "Phone": {
+      "description": "Customer's phone number with the country prefix.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "Postcode": {
+      "description": "Postcode.",
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "RequestAddress": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Address"
+        },
+        {
+          "properties": {
+            "line2": {
+              "$ref": "#/$defs/Line2"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "ServiceType": {
+      "description": "Code that identifies the delivery day type, timeslot type, and available slot length. Learn more [here](./service-types).",
+      "type": "string",
+      "enum": [
+        "ST2",
+        "ST4",
+        "STZ",
+        "SF2",
+        "SF4",
+        "SFZ",
+        "NT2",
+        "NT4",
+        "NTH",
+        "NTZ",
+        "NF2",
+        "NF4",
+        "NFA",
+        "XF4",
+        "NFZ",
+        "PT2",
+        "PT4",
+        "PTH",
+        "PTA",
+        "PTZ",
+        "PF2",
+        "PF4",
+        "PFA",
+        "PFZ",
+        "CT2",
+        "CT4",
+        "CTH",
+        "CTZ",
+        "XFZ",
+        "CF2",
+        "CF4",
+        "CFA",
+        "CFZ",
+        "WT2",
+        "WT4",
+        "WTH",
+        "WTZ",
+        "WF2",
+        "WF4",
+        "WFA",
+        "WFZ",
+        "XTZ",
+        "XF2",
+        "ST3",
+        "DDD",
+        "ND",
+        "SD",
+        "UNK",
+        "RFA",
+        "RT2",
+        "RT4"
+      ]
+    },
+    "Time": {
+      "description": "UTC time in `hh:mm:ss` format.",
+      "maxLength": 8,
+      "minLength": 8,
+      "type": "string",
+      "format": "time"
+    },
+    "UndeliverableAddressNotPersisted": {
+      "description": ":construction: Currently input for this information is not persisted by Paack. Value equals the pickup address when retrieved through the GET method.",
+      "type": "null"
+    },
+    "UndeliverableInstructions": {
+      "description": ":construction: Currently input for this information is not persisted by Paack. Value equals the pickup instructions when retrieved through the GET method.",
+      "type": "null"
+    },
+    "WindowDatetime": {
+      "description": "UTC time defined by the properties `date` and `time`.",
+      "properties": {
+        "date": {
+          "$ref": "#/$defs/Date"
+        },
+        "time": {
+          "$ref": "#/$defs/Time"
+        }
+      },
+      "required": [
+        "date",
+        "time"
+      ],
+      "type": "object"
+    },
+    "WindowObject": {
+      "description": "Timeslot defined by the objects `start` and `end`.",
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/WindowDatetime"
+        },
+        "end": {
+          "$ref": "#/$defs/WindowDatetime"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "type": "object"
+    }
+  }
+}
