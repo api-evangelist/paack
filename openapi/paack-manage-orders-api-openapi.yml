@@ -1,0 +1,1228 @@
+openapi: 3.2.0
+info:
+  description: API definition of the Orders API. Includes Order Management, Tracking Pull, and Proof of Delivery.
+  title: Manage orders API
+  version: '3.1'
+servers:
+- url: https://api.paack.app
+  description: Production environment
+- url: https://api.staging.paack.app
+  description: Staging environment
+security:
+- api_key: []
+tags:
+- name: Manage orders
+paths:
+  /public/v3/orders:
+    post:
+      description: 'Creates an order for Paack. One POST request creates one order.
+
+
+        Optionally, use the query parameters to get a base64-encoded label in the response.'
+      operationId: orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOrderRequest'
+            example:
+              external_id: 24cfcc85-b288-404d-8bbd-e0d32eac2990
+              customer:
+                first_name: Martín
+                last_name: Fierro
+                email: martin.fierro@example.es
+                phone: '+34397341804'
+                has_gdpr_consent: true
+              delivery_address:
+                city: Barcelona
+                country: ES
+                line1: Via Augusta 17, Principal
+                post_code: 08006
+              expected_delivery_ts:
+                start:
+                  date: '2022-10-28'
+                  time: 08:00:00
+                end:
+                  date: '2022-10-28'
+                  time: '10:00:00'
+              delivery_instructions: Leave at the door
+              delivery_type: direct
+              service_type: CFA
+              parcels:
+              - barcode: 0347248734534534545364351
+                height: 3.45
+                length: 4.35
+                width: 3.45
+                weight: 3.45
+              order_details:
+              - name: sale_number
+                type: string
+                value: g_328294984981
+              clusters:
+              - 3e8b9bdf-d1a1-4e6c-a3af-76ba29ct9bcc
+              pick_up_address:
+                city: Barcelona
+                country: ES
+                line1: Avinguda Diagonal 1234
+                post_code: 08021
+              expected_pick_up_ts:
+                start:
+                  date: '2022-10-28'
+                  time: '16:00:00'
+                end:
+                  date: '2022-10-28'
+                  time: '18:00:00'
+              pick_up_instructions: Check opening hours
+              cod_value: 25
+              cod_currency: EUR
+              undeliverable_instructions: Open parcel
+      parameters:
+      - description: Defines the label to return in the response. Must be used along with the `labelFormat` query parameter.
+        in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - label
+          default: label
+      - description: Defines the label format. Must be used along with the `include` query parameter.
+        in: query
+        name: labelFormat
+        required: false
+        schema:
+          type: string
+          enum:
+          - pdf
+          - zpl
+          default: pdf
+      - description: Returns a 201 if the external ID already exists.
+        in: query
+        name: idempotent
+        required: false
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateOrderResponse201'
+        '400':
+          $ref: '#/components/responses/CreateOrderResponse400'
+        '401':
+          $ref: '#/components/responses/Auth401'
+        '403':
+          $ref: '#/components/responses/Auth403'
+        '500':
+          $ref: '#/components/responses/CreateOrderResponse500'
+      tags:
+      - Manage orders
+      summary: Orders
+      x-summary-source: derived
+  /public/v3/orders/{external_id}:
+    get:
+      description: 'Retrieves order data. One GET request retrieves one order. The path parameter specifies the order to retrieve. The 200 response returns information persisted for the order from the POST and PUT requests.
+
+
+        Optionally, use the query parameters to get a base64-encoded label in the response.'
+      operationId: orders-get
+      parameters:
+      - description: Defines the order to retrieve information for.
+        in: path
+        name: external_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ExternalIdOrder'
+      - description: Defines the label to return in the response. Must be used along with the `labelFormat` query parameter.
+        in: query
+        name: include
+        schema:
+          type: string
+          enum:
+          - label
+          default: label
+      - description: Defines the label format. Must be used along with the `include` query parameter.
+        in: query
+        name: labelFormat
+        required: false
+        schema:
+          type: string
+          enum:
+          - pdf
+          - zpl
+          default: pdf
+      responses:
+        '200':
+          $ref: '#/components/responses/RetrieveOrderResponse200'
+        '400':
+          $ref: '#/components/responses/RetrieveOrderResponse400'
+        '401':
+          $ref: '#/components/responses/Auth401'
+        '403':
+          $ref: '#/components/responses/Auth403'
+        '404':
+          $ref: '#/components/responses/OrderResponse404'
+        '500':
+          $ref: '#/components/responses/CreateOrderResponse500'
+      tags:
+      - Manage orders
+      summary: Orders get
+      x-summary-source: derived
+    put:
+      description: 'Updates the order of the `external_id` specified in the path parameter.
+
+
+        Note that you can update only some fields from the create (POST) request. You cannot update `external_id`, `cod_value`, `cod_currency`, `delivery_type`, `service_type`, `customer.has_gdpr_consent`, `order_details["sale_number"]`, `delivery_instructions`, and `pick_up_instructions`. There is no validation performed if you try to update those fields.
+
+
+        In case you need to update the pickup address, cancel the order and use a different external ID to create an order with the correct pickup address.'
+      operationId: orders-put
+      parameters:
+      - description: '`external_id` with which the order was created.'
+        in: path
+        name: external_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ExternalIdOrder'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderRequest'
+            example:
+              customer:
+                first_name: Martín
+                last_name: Fierro
+                email: martin.fierro@example.es
+              delivery_address:
+                city: Barcelona
+                country: ES
+                line1: Via Augusta 17, Principal
+                post_code: 08006
+              expected_delivery_ts:
+                start:
+                  date: '2023-12-28'
+                  time: 08:00:00
+                end:
+                  date: '2023-12-28'
+                  time: '10:00:00'
+              parcels:
+              - barcode: 0347248734534534545364351
+                height: 3.45
+                length: 4.35
+                width: 3.45
+                weight: 5.02
+              expected_pick_up_ts:
+                start:
+                  date: '2023-01-01'
+                  time: '16:00:00'
+                end:
+                  date: '2023-01-01'
+                  time: '18:00:00'
+              clusters:
+              - 3e8b9bdf-d1a1-4e6c-a3af-76ba29ct9bcc
+        description: Updates the order of the specified `external_id`.
+      responses:
+        '201':
+          $ref: '#/components/responses/UpdateOrderResponse201'
+        '400':
+          $ref: '#/components/responses/CreateOrderResponse400'
+        '401':
+          $ref: '#/components/responses/Auth401'
+        '403':
+          $ref: '#/components/responses/Auth403'
+        '404':
+          $ref: '#/components/responses/OrderResponse404'
+        '500':
+          $ref: '#/components/responses/CreateOrderResponse500'
+      tags:
+      - Manage orders
+      summary: Orders put
+      x-summary-source: derived
+    delete:
+      description: 'Updates the status of the order to cancelled. One DELETE request cancels one order. The path parameter specifies the order to cancel. The 201 response containing the external ID confirms the action.
+
+
+        An `external_id` identifying a canceled order cannot be reused to create another order.'
+      operationId: orders-delete
+      parameters:
+      - in: path
+        name: external_id
+        required: true
+        schema:
+          $ref: '#/components/schemas/ExternalIdOrder'
+      responses:
+        '201':
+          $ref: '#/components/responses/UpdateOrderResponse201'
+        '400':
+          $ref: '#/components/responses/CreateOrderResponse400'
+        '401':
+          $ref: '#/components/responses/Auth401'
+        '403':
+          $ref: '#/components/responses/Auth403'
+        '404':
+          $ref: '#/components/responses/OrderResponse404'
+        '500':
+          $ref: '#/components/responses/CreateOrderResponse500'
+      tags:
+      - Manage orders
+      summary: Orders delete
+      x-summary-source: derived
+components:
+  schemas:
+    NotPersisted:
+      description: ':construction: Currently input for this information is not persisted by Paack so it cannot be retrieved through the GET method.'
+      type: 'null'
+    ErrorId:
+      description: Response identifier you can refer us to in case of problems.
+      type: string
+      format: uuid
+    RequestAddress:
+      allOf:
+      - $ref: '#/components/schemas/Address'
+      - properties:
+          line2:
+            $ref: '#/components/schemas/Line2'
+        type: object
+    Country:
+      description: Country in ISO 3166 alpha 2 format.
+      enum:
+      - ES
+      - FR
+      - GB
+      - IT
+      - PT
+      type: string
+    City:
+      description: City.
+      type: string
+      minLength: 2
+      maxLength: 128
+    DeliveryType:
+      description: Type of the delivery. Learn more [here](./reverse-logistcs).
+      type: string
+      enum:
+      - direct
+      - reverse
+    Response404ErrorObject:
+      properties:
+        id:
+          $ref: '#/components/schemas/ErrorId'
+        status:
+          description: HTTP response code.
+          type: string
+          enum:
+          - '404'
+        source:
+          $ref: '#/components/schemas/Source'
+        code:
+          description: Error code.
+          type: string
+          enum:
+          - ORD007
+        detail:
+          description: Error message.
+          type: string
+          enum:
+          - Order does not exist.
+      type: object
+    AddOrderRequestParcelsElem:
+      properties:
+        barcode:
+          description: Barcode of the parcel.
+          type: string
+          maxLength: 128
+        height:
+          description: Height of the parcel in cm.
+          format: double
+          type: number
+          minimum: 0
+          maximum: 120
+        length:
+          description: Length of the parcel in cm.
+          format: double
+          type: number
+          minimum: 0
+          maximum: 120
+        width:
+          description: Width of the parcel in cm.
+          format: double
+          type: number
+          minimum: 0
+          maximum: 120
+        weight:
+          description: Actual weight of the parcel in kg.
+          format: double
+          type: number
+          minimum: 0
+          maximum: 32
+        type:
+          $ref: '#/components/schemas/ParcelsElemType'
+        parcel_details:
+          $ref: '#/components/schemas/NotPersisted'
+      required:
+      - barcode
+      type: object
+    Currency:
+      description: Currency code in ISO 4217 format.
+      enum:
+      - EUR
+      - GBP
+      type: string
+    Line1:
+      description: Primary address.
+      type: string
+      maxLength: 128
+    FirstName:
+      description: Customer's first or full name. If the `last_name` value is not specified, the full name is split and persisted in both fields.
+      type: string
+      maxLength: 128
+    ResponseRetrieveErrorObject:
+      properties:
+        id:
+          $ref: '#/components/schemas/ErrorId'
+        status:
+          description: HTTP response code.
+          type: string
+          enum:
+          - '400'
+        source:
+          $ref: '#/components/schemas/Source'
+        detail:
+          description: Error message.
+          type: string
+          enum:
+          - Retailer order number not valid
+      type: object
+    Cluster:
+      type: array
+      items:
+        type: string
+      description: ':construction: Identifiers that associate orders with each other. Learn more [here](./reverse-logistics). Note that, as of now, the array cannot be retrieved through a GET request.'
+    Email:
+      description: Customer's email address.
+      type: string
+      minLength: 6
+      maxLength: 128
+    AddOrderRequest:
+      properties:
+        external_id:
+          $ref: '#/components/schemas/ExternalIdOrder'
+        customer:
+          $ref: '#/components/schemas/CreateCustomer'
+        delivery_address:
+          allOf:
+          - description: Delivery address.
+          - $ref: '#/components/schemas/RequestAddress'
+        expected_delivery_ts:
+          allOf:
+          - description: Expected date & time of the delivery.
+          - $ref: '#/components/schemas/WindowObject'
+        delivery_instructions:
+          $ref: '#/components/schemas/DeliveryInstructions'
+        delivery_type:
+          $ref: '#/components/schemas/DeliveryType'
+        service_type:
+          $ref: '#/components/schemas/ServiceType'
+        parcels:
+          description: Parcels included in the order. As for barcodes, generate them in the same way for both direct and reverse orders so you can use them for tracking.
+          items:
+            $ref: '#/components/schemas/AddOrderRequestParcelsElem'
+          type: array
+        order_details:
+          $ref: '#/components/schemas/OrderDetails'
+        pick_up_address:
+          allOf:
+          - description: Pickup address. In case of reverse orders, this is the customer's address where the Paack driver should collect the parcels.
+          - $ref: '#/components/schemas/RequestAddress'
+        ❗expected_pick_up_ts:
+          allOf:
+          - description: Expected date & time of the pickup. Not required for direct orders but is necessary for reverse and exchange orders. In the case of reverse orders, this is when the Paack driver should collect the parcels. Note that this field must contain the *same value* as the field `expected_delivery_ts` in an exchange scenario.
+          - $ref: '#/components/schemas/WindowObject'
+        pick_up_instructions:
+          description: Instructions for the pickup.
+          type: string
+        cod_value:
+          $ref: '#/components/schemas/CodValue'
+        cod_currency:
+          $ref: '#/components/schemas/Currency'
+        clusters:
+          $ref: '#/components/schemas/Cluster'
+        undeliverable_address:
+          $ref: '#/components/schemas/UndeliverableAddressNotPersisted'
+        undeliverable_instructions:
+          $ref: '#/components/schemas/UndeliverableInstructions'
+        insured_value:
+          $ref: '#/components/schemas/NotPersisted'
+        insured_currency:
+          $ref: '#/components/schemas/NotPersisted'
+      required:
+      - customer
+      - delivery_address
+      - expected_delivery_ts
+      - external_id
+      - service_type
+      - pick_up_address
+      type: object
+    UpdateOrderRequest:
+      description: Defines the request to update the specified order.
+      properties:
+        customer:
+          $ref: '#/components/schemas/UpdateCustomer'
+        delivery_address:
+          allOf:
+          - description: Delivery address.
+          - $ref: '#/components/schemas/RequestAddress'
+        expected_delivery_ts:
+          $ref: '#/components/schemas/WindowObject'
+        parcels:
+          allOf:
+          - description: Parcels included in the order. If you don't want to update the parcels, keep the array null or empty. If you want to update, add, or remove parcels, define them all one per object as this array overwrites whatever was persisted for the parcels before the update.
+          - items:
+              $ref: '#/components/schemas/AddOrderRequestParcelsElem'
+            type: array
+        expected_pick_up_ts:
+          $ref: '#/components/schemas/WindowObject'
+        clusters:
+          $ref: '#/components/schemas/Cluster'
+      required:
+      - customer
+      - delivery_address
+      - expected_delivery_ts
+      type: object
+    PickupAddress:
+      description: Pickup address.
+      properties:
+        city:
+          $ref: '#/components/schemas/City'
+        country:
+          $ref: '#/components/schemas/Country'
+        line1:
+          $ref: '#/components/schemas/Line1Line2'
+        post_code:
+          $ref: '#/components/schemas/Postcode'
+      required:
+      - city
+      - country
+      - line1
+      - post_code
+      type: object
+    ServiceType:
+      description: Code that identifies the delivery day type, timeslot type, and available slot length. Learn more [here](./service-types).
+      type: string
+      enum:
+      - ST2
+      - ST4
+      - STZ
+      - SF2
+      - SF4
+      - SFZ
+      - NT2
+      - NT4
+      - NTH
+      - NTZ
+      - NF2
+      - NF4
+      - NFA
+      - XF4
+      - NFZ
+      - PT2
+      - PT4
+      - PTH
+      - PTA
+      - PTZ
+      - PF2
+      - PF4
+      - PFA
+      - PFZ
+      - CT2
+      - CT4
+      - CTH
+      - CTZ
+      - XFZ
+      - CF2
+      - CF4
+      - CFA
+      - CFZ
+      - WT2
+      - WT4
+      - WTH
+      - WTZ
+      - WF2
+      - WF4
+      - WFA
+      - WFZ
+      - XTZ
+      - XF2
+      - ST3
+      - DDD
+      - ND
+      - SD
+      - UNK
+      - RFA
+      - RT2
+      - RT4
+    Status:
+      description: Status of the order. `draft` if just created. Corresponds to the `order_status` field in the [webhook output](./webhook-output).
+      type: string
+      enum:
+      - return_in_progress
+      - cancelled
+      - undelivered
+      - delivered
+      - reached_delivered
+      - picked_up
+      - pending
+      - draft
+      - reached_picked_up
+      - on_course
+    Line1Line2:
+      description: Primary and additional address information. Persists merged input from fields `line1` and `line2`.
+      type: string
+      maxLength: 128
+    DeliveryAddress:
+      description: Delivery address.
+      properties:
+        city:
+          $ref: '#/components/schemas/City'
+        country:
+          $ref: '#/components/schemas/Country'
+        line1:
+          $ref: '#/components/schemas/Line1Line2'
+        post_code:
+          $ref: '#/components/schemas/Postcode'
+      required:
+      - city
+      - country
+      - line1
+      - post_code
+      type: object
+    ExternalIdOrder:
+      description: 'Order''s ID assigned by the retailer; unique within all the retailer''s orders manifested to Paack.
+
+
+        Can include special characters, excluding a comma, though for further use you need to [encode them](./special-characters).
+
+
+        `external_id` equals `tracking_id`.'
+      maxLength: 128
+      type: string
+    NullField:
+      description: 'null'
+      type: 'null'
+    CodValue:
+      description: Amount of cash on delivery. Not persisted if the value equals 0.
+      format: double
+      minimum: 0
+      type: number
+    Postcode:
+      description: Postcode.
+      type: string
+      minLength: 3
+      maxLength: 128
+    DeliveryInstructions:
+      description: Instructions for the delivery.
+      type: string
+      maxLength: 128
+    LastName:
+      description: Customer's last name. If not specified in the input, the last part of the first name is persisted in this field.
+      type: string
+      maxLength: 128
+    Label:
+      description: base64-encoded label.
+      type: string
+    Time:
+      description: UTC time in `hh:mm:ss` format.
+      maxLength: 8
+      minLength: 8
+      type: string
+      format: time
+    Phone:
+      description: Customer's phone number with the country prefix.
+      type: string
+      minLength: 1
+      maxLength: 128
+    OrderDetails:
+      description: 'Properties describing the order. :construction: Currently only the string property `sale_number`, assigning the order a custom identifier, is persisted by Paack and can be retrieved through the GET method.'
+      items:
+        $ref: '#/components/schemas/AddCustomPropertiesString'
+      type: array
+      maxItems: 1
+    RetrieveOrderResponseSuccessParcelsElem:
+      allOf:
+      - $ref: '#/components/schemas/AddOrderRequestParcelsElem'
+      - properties:
+          volumetric_weight:
+            description: Calculated as (height x width x length) / 1000.
+            format: double
+            type: number
+        type: object
+    Source:
+      description: Endpoint that triggered the response.
+      type: string
+    UpdateCustomer:
+      allOf:
+      - $ref: '#/components/schemas/Customer'
+      - properties:
+          phone:
+            allOf:
+            - description: Customer's phone number without the country prefix. Note that the country prefix is persisted from the request that created the order and cannot be updated.
+            - $ref: '#/components/schemas/Phone'
+        type: object
+    ResponseCreateError500Object:
+      properties:
+        id:
+          $ref: '#/components/schemas/ErrorId'
+        status:
+          description: HTTP response code.
+          type: string
+          enum:
+          - '500'
+        source:
+          $ref: '#/components/schemas/Source'
+        code:
+          description: Error code.
+          type: string
+          enum:
+          - IE-0001
+          - UE-0001
+        detail:
+          description: Fixed name.
+          type: internal error
+      type: object
+    WindowDatetime:
+      description: UTC time defined by the properties `date` and `time`.
+      properties:
+        date:
+          $ref: '#/components/schemas/Date'
+        time:
+          $ref: '#/components/schemas/Time'
+      required:
+      - date
+      - time
+      type: object
+    HasGdprConsent:
+      description: Whether the customer gave their GDPR consent.
+      type: boolean
+    RetrieveCustomer:
+      allOf:
+      - properties:
+          address:
+            $ref: '#/components/schemas/DeliveryAddress'
+        type: object
+      - $ref: '#/components/schemas/Customer'
+    CreateCustomer:
+      allOf:
+      - $ref: '#/components/schemas/Customer'
+      - properties:
+          phone:
+            $ref: '#/components/schemas/Phone'
+          has_gdpr_consent:
+            $ref: '#/components/schemas/HasGdprConsent'
+          address:
+            $ref: '#/components/schemas/CustomerAddressNotPersisted'
+          external_id:
+            $ref: '#/components/schemas/NotPersisted'
+          language:
+            $ref: '#/components/schemas/NotPersisted'
+        type: object
+    CustomerAddressNotPersisted:
+      description: ':construction: Currently input for this information is not persisted by Paack. Value equals the delivery address when retrieved through the GET method.'
+      type: 'null'
+    Address:
+      properties:
+        city:
+          $ref: '#/components/schemas/City'
+        country:
+          $ref: '#/components/schemas/Country'
+        line1:
+          $ref: '#/components/schemas/Line1'
+        post_code:
+          $ref: '#/components/schemas/Postcode'
+      required:
+      - city
+      - country
+      - line1
+      - post_code
+      type: object
+    ResponseForbiddenErrorObject:
+      properties:
+        id:
+          $ref: '#/components/schemas/ErrorId'
+        status:
+          description: HTTP response code.
+          type: string
+          enum:
+          - '403'
+        source:
+          $ref: '#/components/schemas/Source'
+        code:
+          description: Error code.
+          type: string
+          enum:
+          - ACC007
+        detail:
+          description: Error message.
+          type: string
+      type: object
+    UndeliverableAddressNotPersisted:
+      description: ':construction: Currently input for this information is not persisted by Paack. Value equals the pickup address when retrieved through the GET method.'
+      type: 'null'
+    AddCustomPropertiesString:
+      properties:
+        name:
+          description: Name of the property.
+          default: sale_number
+          type: string
+        type:
+          description: Type of the property.
+          enum:
+          - string
+          - array
+          - boolean
+          - 'null'
+          - number
+          - object
+          default: string
+          type: string
+        value:
+          description: Value of the property.
+          type: string
+          maxLength: 30
+      required:
+      - name
+      - type
+      - value
+      type: object
+    Line2:
+      description: Additional address information.
+      type: string
+      maxLength: 128
+    ParcelsElemType:
+      description: ':construction: Currently input for this information is not persisted by Paack. Value equals `standard` when retrieved through the GET method.'
+      type: string
+      default: standard
+      enum:
+      - standard
+    WindowObject:
+      description: Timeslot defined by the objects `start` and `end`.
+      properties:
+        start:
+          $ref: '#/components/schemas/WindowDatetime'
+        end:
+          $ref: '#/components/schemas/WindowDatetime'
+      required:
+      - start
+      - end
+      type: object
+    Date:
+      description: Date in `YYYY-MM-DD` format.
+      maxLength: 10
+      minLength: 10
+      type: string
+      format: date
+    UndeliverableInstructions:
+      description: ':construction: Currently input for this information is not persisted by Paack. Value equals the pickup instructions when retrieved through the GET method.'
+      type: 'null'
+    ResponseCreateErrorObject:
+      properties:
+        status:
+          description: HTTP response code.
+          type: string
+          enum:
+          - '400'
+        source:
+          $ref: '#/components/schemas/Source'
+        code:
+          description: Error code.
+          type: string
+          enum:
+          - ORD000
+          - ORD001
+          - ORD002
+          - ORD003
+          - ORD004
+          - ORD005
+          - ORD006
+          - ORD008
+          - ORD100
+          - ORD101
+          - ORD102
+          - ORD103
+          - ORD104
+          - ORD105
+          - ORD106
+          - ORD107
+          - ORD108
+        detail:
+          description: Error message.
+          type: string
+      type: object
+    ResponseAuthErrorObject:
+      properties:
+        id:
+          $ref: '#/components/schemas/ErrorId'
+        status:
+          description: HTTP response code.
+          type: string
+          enum:
+          - '401'
+        source:
+          $ref: '#/components/schemas/Source'
+        code:
+          description: Error code.
+          type: string
+          enum:
+          - ACC009
+        detail:
+          description: Error message.
+          type: string
+      type: object
+    Customer:
+      description: Information on the person receiving the parcels.
+      properties:
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
+        email:
+          $ref: '#/components/schemas/Email'
+      required:
+      - first_name
+      type: object
+  responses:
+    Auth403:
+      content:
+        application/json:
+          schema:
+            properties:
+              data:
+                $ref: '#/components/schemas/NullField'
+              error:
+                description: Contains the error details.
+                items:
+                  $ref: '#/components/schemas/ResponseForbiddenErrorObject'
+                type: array
+              links:
+                $ref: '#/components/schemas/NullField'
+            type: object
+          example:
+            data: null
+            error:
+            - id: aa7c4461-3779-4e06-92dd-66f971adeea9
+              status: '403'
+              source: POST/GET/PUT/DELETE /public/v3/orders
+              code: ACC007
+              detail: TO-DEFINE
+            links: null
+      description: ':construction: Communicates no rights to access the API. Contact our Customer Solutions team for help. While this HTTP error code is currently not supported the API returns 401.'
+    UpdateOrderResponse201:
+      content:
+        application/json:
+          schema:
+            description: Defines the response to a PUT `/public/v3/orders/{external_id}` request.
+            properties:
+              success:
+                description: Contains the order's external ID that can be used for tracking.
+                properties:
+                  external_id:
+                    $ref: '#/components/schemas/ExternalIdOrder'
+                required:
+                - external_id
+                type: object
+            type: object
+          example:
+            success:
+              external_id: 595b581d-c714-4f22-bce9-9b904694cba4
+      description: Confirms the order of the provided `external_id` has been updated.
+    RetrieveOrderResponse200:
+      content:
+        application/json:
+          schema:
+            properties:
+              status:
+                $ref: '#/components/schemas/Status'
+              cod_currency:
+                $ref: '#/components/schemas/Currency'
+              cod_value:
+                $ref: '#/components/schemas/CodValue'
+              customer:
+                $ref: '#/components/schemas/RetrieveCustomer'
+              delivery_type:
+                $ref: '#/components/schemas/DeliveryType'
+              delivery_address:
+                $ref: '#/components/schemas/DeliveryAddress'
+              delivery_instructions:
+                $ref: '#/components/schemas/DeliveryInstructions'
+              expected_delivery_ts:
+                $ref: '#/components/schemas/WindowObject'
+              expected_pick_up_ts:
+                $ref: '#/components/schemas/WindowObject'
+              external_id:
+                $ref: '#/components/schemas/ExternalIdOrder'
+              parcels:
+                items:
+                  $ref: '#/components/schemas/RetrieveOrderResponseSuccessParcelsElem'
+                type: array
+              order_details:
+                $ref: '#/components/schemas/OrderDetails'
+              pick_up_address:
+                $ref: '#/components/schemas/PickupAddress'
+              pick_up_instructions:
+                type: string
+              service_type:
+                $ref: '#/components/schemas/ServiceType'
+              undeliverable_address:
+                $ref: '#/components/schemas/PickupAddress'
+              undeliverable_instructions:
+                $ref: '#/components/schemas/UndeliverableInstructions'
+              delivery_model:
+                description: Paack's delivery model associated with the service type. Currently only warehouse model is used. Learn more about service types [here](./service-types).
+                type: string
+                enum:
+                - store_model
+                - warehouse_model
+                default: warehouse_model
+              labels:
+                $ref: '#/components/schemas/Label'
+            type: object
+          example:
+            success:
+              status: draft
+              cod_currency: EUR
+              cod_value: 25
+              customer:
+                address:
+                  line1: Via Augusta 17, Principal
+                  city: Barcelona
+                  post_code: 08006
+                  country: ES
+                first_name: Martín
+                last_name: Fierro
+                email: martin.fierro@example.es
+                phone: '+34397341804'
+                has_gdpr_consent: true
+              delivery_type: direct
+              delivery_address:
+                line1: Via Augusta 17, Principal
+                city: Barcelona
+                post_code: 08006
+                country: ES
+              delivery_instructions: Leave at the door
+              expected_delivery_ts:
+                start:
+                  date: '2022-10-28'
+                  time: 08:00:00
+                end:
+                  date: '2022-10-28'
+                  time: '10:00:00'
+              expected_pick_up_ts:
+                start:
+                  date: '2022-10-28'
+                  time: '16:00:00'
+                end:
+                  date: '2022-10-28'
+                  time: '18:00:00'
+              external_id: 17c2f67d-6e11-458c-869a-c18ede84387e
+              parcels:
+              - barcode: 0347248734534534545364351
+                height: 3.45
+                length: 4.35
+                volumetric_weight: 0.051775876
+                weight: 3.45
+                width: 3.45
+                type: standard
+              order_details:
+              - name: sale_number
+                type: string
+                value: g_328294984981
+              pick_up_address:
+                line1: Avinguda Diagonal 1234
+                city: Barcelona
+                post_code: 08021
+                country: ES
+              pick_up_instructions: Check opening hours
+              service_type: CFA
+              undeliverable_address:
+                line1: Avinguda Diagonal 1234
+                city: Barcelona
+                post_code: 08021
+                country: ES
+              undeliverable_instructions: Check opening hours
+              delivery_model: warehouse_model
+              labels: XlhBCl5DSTI4Cl5DRjAsMTAwCl5GTzUwLDUwXkZIXkZEUEFBQ0teRlMKXkNGMCwxMDAKXkZPMCw1MF5GQjc1MCwxLDAsUiwwXkZIXkZEQ0ZBXkZTIApeRk81MCwxNTBeR0I3MDAsMywzXkZTCl5DRkEsNDAKXkZPNTAsMTgwXkZIXkZEMTdjMmY2N2QtNmUxMS00NThjLTg2OWEtYzE4ZWRlXkZTIApeRk81MCwyNTBeR0I3MDAsMywzXkZTCl5DRkEsNDAKXkZPNTAsMjkwXkEwLDQxLDQ1XkZIXkZETWFydMOtbiBGaWVycm9eRlMKXkNGQSwyMApeRk81MCwzNDBeRkheRkRWaWEgQXVndXN0YSAxNywgUHJpbmNpcGFsXkZTCl5GTzUwLDM4MF5GSF5GRF5GUwpeRk81MCw0MjBeRkheRkReRlMKXkZPNTAsNDYwXkZIXkZEXkZTCl5DRjAsNjAKXkZPNTAsNDk1XkZIXkZEMDgwMDZeRlMKXkNGQSwzMApeRk83MDAsNDk1XkZIXkZEMS8xXkZTCl5GTzUwLDU1NV5GSF5GREJhcmNlbG9uYSAsRVNeRlMKXkZPNTAsNjAwXkZIXkZEXkZTCl5CWTIsMiwxMjAKXkZPNTAsNjUwXkJDXkZIXkZEMDM0NzI0ODczNDUzNDUzNDU0NTM2NDM1MV5GUwpeRk81MCw4MjBeR0I3MDAsMywzXkZTCl5DRkEsMjAKXkZPNTAsODUwXkZIXkZEQXZpbmd1ZGEgRGlhZ29uYWwgMTIzNF5GUwpeRk81MCw4OTBeRkheRkReRlMKXkZPNTAwLDg1MF5GSF5GRDQuM3gzLjV4My41XkZTCl5GTzUwLDkzMF5GSF5GRF5GUwpeRk81MCw5NzBeRkheRkReRlMKXkZPNjUwLDkwMF5GSF5GRDMuNSBLZ15GUwpeQ0ZBLDQwCl5GTzUwLDEwMTBeRkheRkQwODAyMV5GUwpeQ0ZBLDMwCl5GTzU4MCw5NTBeRkheRkQyMDIyLTEyLTMxXkZTCl5GTzYyMCwxMDAwXkZEMDg6MDA6MDBeRlMKXkNGQSwzMApeRk81MCwxMDYwXkZIXkZEQmFyY2Vsb25hLEVTXkZTIApeRk81MCwxMTAwXkZIXkZEXkZTIApeWFoKCg==
+      description: Returns information persisted for the order specified in the path parameter. The label is returned if the request included the query parameters.
+    CreateOrderResponse500:
+      content:
+        application/json:
+          schema:
+            properties:
+              data:
+                description: 'null'
+                type: 'null'
+              error:
+                description: Contains the error details.
+                items:
+                  $ref: '#/components/schemas/ResponseCreateError500Object'
+                type: array
+              links:
+                description: 'null'
+                type: 'null'
+            type: object
+          example:
+            data: null
+            error:
+            - id: 56046127-f4f8-4dc9-a0b8-a504e319255b
+              status: '500'
+              source: POST/GET/PUT/DELETE /public/v3/orders
+              code: UE-0001
+              detail: internal error
+            links: null
+      description: Returned in case of internal errors, which means the problem is on Paack's side.
+    Auth401:
+      content:
+        application/json:
+          schema:
+            properties:
+              data:
+                $ref: '#/components/schemas/NullField'
+              error:
+                description: Contains the error details.
+                items:
+                  $ref: '#/components/schemas/ResponseAuthErrorObject'
+                type: array
+              links:
+                $ref: '#/components/schemas/NullField'
+            type: object
+          example:
+            data: null
+            error:
+            - id: c6f410f2-93cd-4aab-818b-773e3466fac9
+              status: '401'
+              source: POST/GET/PUT/DELETE /public/v3/orders
+              code: ACC009
+              detail: There were no valid credentials detected in your request. Check that the authentication token is sent and is not expired.
+            links: null
+      description: Communicates a missing or expired access token for authorization. Currently used also in case of no rights to access the API.
+    CreateOrderResponse400:
+      content:
+        application/json:
+          schema:
+            description: Defines the response to the POST `/orders` request.
+            properties:
+              data:
+                description: 'null'
+                type: 'null'
+              error:
+                description: Contains the error details.
+                items:
+                  $ref: '#/components/schemas/ResponseCreateErrorObject'
+                type: array
+              links:
+                description: 'null'
+                type: 'null'
+            type: object
+          example:
+            data: null
+            error:
+            - id: 9ca08eb3-8bc9-4282-99bc-9b16304fdc6b
+              status: '400'
+              source: POST /public/v3/orders
+              code: ORD001
+              detail: Order external ID already exists.
+            links: null
+      description: Returned in case of validation errors. The details are displayed in the `error` array. Note that the response can return only one error at once.<br /><br />To ensure a correct validation of a request:<br />- Body of the request must use a structured JSON format.<br />- All mandatory fields must be defined.<br />- Values for fields in the request must match the specific data type and format, including all limitations (e.g., `external_id` must be unique).
+    RetrieveOrderResponse400:
+      content:
+        application/json:
+          schema:
+            description: Defines the response to the POST `/orders` request.
+            properties:
+              data:
+                $ref: '#/components/schemas/NullField'
+              error:
+                description: Contains the error details.
+                items:
+                  $ref: '#/components/schemas/ResponseRetrieveErrorObject'
+                type: array
+              links:
+                $ref: '#/components/schemas/NullField'
+            type: object
+          example:
+            data: null
+            error:
+            - id: e5f15347-3b8b-4d37-8c95-711383ca904a
+              status: '400'
+              source: GET /public/v3/orders/order_32345345
+              detail: Retailer order number not valid
+            links: null
+      description: In case the order of the `external_id` provided in the path parameter could not be found.
+    OrderResponse404:
+      content:
+        application/json:
+          schema:
+            properties:
+              data:
+                $ref: '#/components/schemas/NullField'
+              error:
+                description: Contains the error details.
+                items:
+                  $ref: '#/components/schemas/Response404ErrorObject'
+                type: array
+              links:
+                $ref: '#/components/schemas/NullField'
+            type: object
+          example:
+            data: null
+            error:
+            - id: 51eb5d50-a08a-4e25-b81f-e4b35b5774ce
+              status: '404'
+              source: GET/PUT/DELETE /public/v3/orders/ecf856af-b0d9-41db-b8ab-a46fe5da9c353
+              code: ORD007
+              detail: Order does not exist.
+            links: null
+      description: In case the external ID specified in the path parameter doesn't correspond to any order.
+    CreateOrderResponse201:
+      content:
+        application/json:
+          schema:
+            description: Defines the response to the POST `/orders` request.
+            properties:
+              success:
+                description: Contains the order's ID that can be used for tracking. If the request contained the query parameters, this object returns also the order's status and label.
+                properties:
+                  tracking_id:
+                    $ref: '#/components/schemas/ExternalIdOrder'
+                  status:
+                    $ref: '#/components/schemas/Status'
+                  labels:
+                    $ref: '#/components/schemas/Label'
+                required:
+                - tracking_id
+                type: object
+            type: object
+          example:
+            success:
+              tracking_id: 859499e2-2b74-4cd7-8c86-08bd1d1ca0b1
+              status: draft
+              labels: XlhBCl5DSTI4Cl5DRjAsMTAwCl5GTzUwLDUwXkZIXkZEUEFBQ0teRlMKXkNGMCwxMDAKXkZPMCw1MF5GQjc1MCwxLDAsUiwwXkZIXkZEQ0ZBXkZTIApeRk81MCwxNTBeR0I3MDAsMywzXkZTCl5DRkEsNDAKXkZPNTAsMTgwXkZIXkZEODU5NDk5ZTItMmI3NC00Y2Q3LThjODYtMDhiZDFkXkZTIApeRk81MCwyNTBeR0I3MDAsMywzXkZTCl5DRkEsNDAKXkZPNTAsMjkwXkZIXkZETWFydMOtbiBGaWVycm9eRlMKXkNGQSwyMApeRk81MCwzNDBeRkheRkRWaWEgQXVndXN0YSAxNywgUHJpbmNpcGFsXkZTCl5GTzUwLDM4MF5GSF5GRF5GUwpeRk81MCw0MjBeRkheRkReRlMKXkZPNTAsNDYwXkZIXkZEXkZTCl5DRjAsNjAKXkZPNTAsNDk1XkZIXkZEMDgwMDZeRlMKXkNGQSwzMApeRk83MDAsNDk1XkZIXkZEMS8xXkZTCl5GTzUwLDU1NV5GSF5GREJhcmNlbG9uYSAsRVNeRlMKXkZPNTAsNjAwXkZIXkZEXkZTCl5CWTIsMiwxMjAKXkZPNTAsNjUwXkJDXkZIXkZEMDM0NzI0ODczNDUzNDUzNDU0NTM2NDM1MV5GUwpeRk81MCw4MjBeR0I3MDAsMywzXkZTCl5DRkEsMjAKXkZPNTAsODUwXkZIXkZEQXZpbmd1ZGEgRGlhZ29uYWwgMTIzNF5GUwpeRk81MCw4OTBeRkheRkReRlMKXkZPNTAwLDg1MF5GSF5GRDQuM3gzLjV4My41XkZTCl5GTzUwLDkzMF5GSF5GRF5GUwpeRk81MCw5NzBeRkheRkReRlMKXkZPNjUwLDkwMF5GSF5GRDMuNSBLZ15GUwpeQ0ZBLDQwCl5GTzUwLDEwMTBeRkheRkQwODAyMV5GUwpeQ0ZBLDMwCl5GTzU4MCw5NTBeRkheRkQyMDIyLTEyLTI4XkZTCl5GTzYyMCwxMDAwXkZEMDg6MDA6MDBeRlMKXkNGQSwzMApeRk81MCwxMDYwXkZIXkZEQmFyY2Vsb25hLEVTXkZTIApeRk81MCwxMTAwXkZIXkZEXkZTIApeWFoKCg==
+      description: Confirms the creation of an order of the `external_id` that equals the value returned in the `success.tracking_id` field. The fields `status` and `labels` are returned if the request included the query parameters.
+  securitySchemes:
+    api_key:
+      in: header
+      name: Authorization
+      type: apiKey
+x-provenance:
+  method: searched
+  source: https://paack.readme.io/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://paack.readme.io/reference/delivery-verifications.md
+  - https://paack.readme.io/reference/orders-delete.md
+  - https://paack.readme.io/reference/orders-get.md
+  - https://paack.readme.io/reference/orders-put.md
+  - https://paack.readme.io/reference/orders.md
+  merge:
+    pages: 5
+    deduped: 88
+    conflicts_kept_first: 0

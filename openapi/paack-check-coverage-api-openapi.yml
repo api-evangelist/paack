@@ -1,11 +1,10 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Coverage API
+  title: Check coverage API
   description: Find an up-to-date version of these API docs in Confluence at https://paacklogistics.atlassian.net/wiki/spaces/PD/pages/3341320193
   contact:
     email: tech.writers@paack.co
   version: 3.0.0
-jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
 servers:
 - url: https://paack.io/api/v3
   description: Production environment
@@ -13,8 +12,11 @@ servers:
   description: Staging environment
 security:
 - Bearer: []
+tags:
+- name: Check coverage
 paths:
   /coverage:
+    parameters: []
     get:
       description: 'Verifies whether the postcode or postcode zone specified in the query parameter is covered by Paack.
 
@@ -69,9 +71,16 @@ paths:
                 $ref: '#/components/schemas/CheckCoverageResponse401'
       tags:
       - Check coverage
-    parameters: []
+      summary: Coverage
+      x-summary-source: derived
 components:
   schemas:
+    CountryZone:
+      type: string
+      description: Country code in ISO 3166 alpha 2 format. Currently, the postcode zones are defined for Portugal and Great Britain.
+      enum:
+      - PT
+      - GB
     CountryCode:
       type: string
       description: Country code in ISO 3166 alpha 2 format.
@@ -81,12 +90,6 @@ components:
       - GB
       - FR
       - IT
-    CountryZone:
-      type: string
-      description: Country code in ISO 3166 alpha 2 format. Currently, the postcode zones are defined for Portugal and Great Britain.
-      enum:
-      - PT
-      - GB
     CoverageZone:
       type: string
       minLength: 2
@@ -95,21 +98,24 @@ components:
       type: string
       minLength: 2
       description: Postcode of the location.
-    Postcode:
+    CheckCoverageResponse400:
+      title: Bad request
       type: object
+      example:
+        error:
+          code: PC041
+          message: 'dcByPostCodesGetter: multi error: coverage_code or coverage_zone is required field'
       properties:
-        country:
-          $ref: '#/components/schemas/CountryCode'
-        coverage_code:
-          $ref: '#/components/schemas/CoverageCode'
-    Zone:
-      title: Postcode zone
-      type: object
-      properties:
-        country:
-          $ref: '#/components/schemas/CountryZone'
-        coverage_zone:
-          $ref: '#/components/schemas/CoverageZone'
+        error:
+          description: Contains the error code and its details.
+          type: object
+          properties:
+            code:
+              description: Error code.
+              type: string
+            message:
+              description: Error details.
+              type: string
     CheckCoverageResponse200:
       title: Covered
       type: object
@@ -144,24 +150,14 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Zone'
-    CheckCoverageResponse400:
-      title: Bad request
+    Zone:
+      title: Postcode zone
       type: object
-      example:
-        error:
-          code: PC041
-          message: 'dcByPostCodesGetter: multi error: coverage_code or coverage_zone is required field'
       properties:
-        error:
-          description: Contains the error code and its details.
-          type: object
-          properties:
-            code:
-              description: Error code.
-              type: string
-            message:
-              description: Error details.
-              type: string
+        country:
+          $ref: '#/components/schemas/CountryZone'
+        coverage_zone:
+          $ref: '#/components/schemas/CoverageZone'
     CheckCoverageResponse401:
       title: Authorization issue
       type: object
@@ -180,6 +176,13 @@ components:
       example:
         code: 401
         message: Jwt is missing
+    Postcode:
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/CountryCode'
+        coverage_code:
+          $ref: '#/components/schemas/CoverageCode'
   securitySchemes:
     Bearer:
       in: header

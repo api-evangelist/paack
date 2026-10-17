@@ -1,0 +1,48 @@
+{
+  "provider": "paack",
+  "sources": [
+    "paack-api-authentication-openapi.yml",
+    "paack-coverage-api-openapi.yml",
+    "paack-labeler-api-openapi.yml",
+    "paack-orders-api-openapi.yml",
+    "paack-tracking-pull-api-openapi.yml"
+  ],
+  "outputs": [
+    "paack-get-access-token-api-openapi.yml",
+    "paack-check-coverage-api-openapi.yml",
+    "paack-generate-labels-api-openapi.yml",
+    "paack-manage-orders-api-openapi.yml",
+    "paack-retrieve-delivery-proof-api-openapi.yml",
+    "paack-retrieve-events-history-api-openapi.yml",
+    "paack-retrieve-last-event-api-openapi.yml"
+  ],
+  "archived": [
+    "deleted 4 superseded output(s) from the previous generation",
+    "archived openapi/paack-api-authentication-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [
+    "paack-coverage-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. /coverage get); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "paack-labeler-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. /labels post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "paack-orders-api-openapi.yml: previously refined output kept for 5 operation(s) no archived document covers (e.g. /public/v3/orders post, /public/v3/orders/{external_id} delete, /public/v3/orders/{external_id} get); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "paack-tracking-pull-api-openapi.yml: previously refined output kept for 2 operation(s) no archived document covers (e.g. /api/v3/tracking/events get, /api/v3/tracking/events/latest get); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth."
+  ],
+  "notes": [
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "paack-api-authentication-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "paack-api-authentication-openapi.yml: declared missing tag: Get access token",
+    "paack-coverage-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "paack-coverage-api-openapi.yml: declared missing tag: Check coverage",
+    "paack-labeler-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "paack-labeler-api-openapi.yml: declared missing tag: Generate labels",
+    "paack-orders-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "paack-orders-api-openapi.yml: declared missing tag: Manage orders",
+    "paack-orders-api-openapi.yml: declared missing tag: Retrieve delivery proof",
+    "paack-tracking-pull-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "paack-tracking-pull-api-openapi.yml: declared missing tag: Retrieve events history",
+    "paack-tracking-pull-api-openapi.yml: declared missing tag: Retrieve last event",
+    "superseded outputs removed: paack-coverage-api-openapi.yml, paack-labeler-api-openapi.yml, paack-orders-api-openapi.yml, paack-tracking-pull-api-openapi.yml",
+    "apis.yml register: written (+7 apis, 8 total)"
+  ],
+  "skipped": []
+}

@@ -1,16 +1,27 @@
+openapi: 3.2.0
 info:
   description: Authentication to Paack APIs.
-  title: Paack API Authentication
+  title: Paack API Authentication Get access token API
   version: '3'
-openapi: 3.1.0
-security: []
 servers:
 - url: https://paack-hq-production.eu.auth0.com/oauth
 - url: https://paack-hq-staging.eu.auth0.com/oauth
+security: []
+tags:
+- name: Get access token
 paths:
   /token:
     post:
-      description: Lets you authenticate to Paack APIs. Successful authentication provides an `access token` you must forward with every call to our APIs.<br /><br />The Staging environment allows you to test the APIs to see if they produce your desired results. When you are satisfied that everything works well, you can move on to the Production environment.<br /><br />The Production environment allows you to make your confirmed requests to Paack APIs.<br /><br /> You can find a definition in JSON format of our authentication API [here](https://drive.google.com/drive/folders/1u9Ja61PjXDGSJYoMnbFKfGI2bWmbbyvk).
+      description: 'Lets you authenticate to Paack APIs. Successful authentication provides an `access token` you must forward with every call to our APIs.
+
+
+        The Staging environment allows you to test the APIs to see if they produce your desired results. When you are satisfied that everything works well, you can move on to the Production environment.
+
+
+        The Production environment allows you to make your confirmed requests to Paack APIs.
+
+
+        You can find a definition in JSON format of our authentication API here.'
       operationId: token
       requestBody:
         content:
@@ -59,6 +70,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
       tags:
       - Get access token
+      summary: Token
+      x-summary-source: derived
 components:
   responses:
     IssueResponse:
