@@ -258,6 +258,8 @@ apis:
   humanURL: https://paack.readme.io/
   baseURL: https://api.paack.app
   tags:
+  - Manage Orders
+  tags_raw:
   - Manage orders
   properties:
   - type: OpenAPI
